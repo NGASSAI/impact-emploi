@@ -32,105 +32,122 @@ $user = $stmt->fetch();
 ?>
 
 <div class="container">
-    <div class="form-card" style="max-width: 800px;">
-        <h2>Mon Profil</h2>
-        <div style="display: flex; gap: 20px; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px;">
-            <div style="width: 80px; height: 80px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold;">
-                <?php echo strtoupper(substr($user['prenom'], 0, 1)); ?>
-            </div>
-            <div>
-                <p style="font-size: 1.2rem; font-weight: bold;"><?php echo htmlspecialchars($user['prenom'] . ' ' . $user['nom']); ?></p>
-                <p style="color: var(--secondary);"><?php echo htmlspecialchars($user['email']); ?></p>
-                <span class="badge" style="background: #dcfce7; color: #166534;">Compte <?php echo ucfirst($user['role']); ?></span>
+    <!-- Bouton retour à l'accueil -->
+    <div style="margin-bottom: 20px;">
+        <a href="index.php" class="back-link">← Retour aux offres disponibles</a>
+    </div>
+
+    <!-- Card d'en-tête professionnel -->
+    <div class="profile-header-card">
+        <div class="profile-avatar">
+            <?php echo strtoupper(substr($user['prenom'], 0, 1)); ?>
+        </div>
+        <div class="profile-info">
+            <h1 class="profile-name"><?php echo htmlspecialchars($user['prenom'] . ' ' . $user['nom']); ?></h1>
+            <p class="profile-email"><?php echo htmlspecialchars($user['email']); ?></p>
+            <div class="profile-badges">
+                <span class="badge-role"><?php echo $user['role'] === 'recruteur' ? '👔 Recruteur' : '💼 Chercheur d\'emploi'; ?></span>
+                <span class="badge-member">
+                    Membre depuis 
+                    <?php
+                        $inscrDate = $user['date_inscription'] ?? $user['created_at'];
+                        if (!empty($inscrDate) && strtotime($inscrDate) !== false) {
+                            echo date('d/m/Y', strtotime($inscrDate));
+                        } else {
+                            echo 'récemment';
+                        }
+                    ?>
+                </span>
             </div>
         </div>
+    </div>
 
-        <div style="margin-bottom: 30px;">
-            <p><strong>📞 Téléphone :</strong> <?php echo htmlspecialchars($user['telephone'] ?: 'Non renseigné'); ?>
-                <a href="#update-contact" class="inline-button" title="Modifier vos coordonnées">Modifier mes coordonnées</a>
-            </p>
-            <p style="color:#6b7280; font-size:0.95rem; margin-top:6px;">Indiquez votre numéro pour être contacté; cochez WhatsApp si vous acceptez d'être joint par message.</p>
-            <p><strong>📅 Membre depuis le :</strong>
-                <?php
-                    $inscrDate = null;
-                    if (!empty($user['date_inscription'])) {
-                        $inscrDate = $user['date_inscription'];
-                    } elseif (!empty($user['created_at'])) {
-                        $inscrDate = $user['created_at'];
-                    }
-
-                    if (!empty($inscrDate) && strtotime($inscrDate) !== false && strtotime($inscrDate) > 0) {
-                        echo date('d/m/Y', strtotime($inscrDate));
-                    } else {
-                        echo '—';
-                    }
-                ?>
-            </p>
+    <!-- Section Contact -->
+    <div class="profile-section">
+        <h2>📞 Informations de contact</h2>
+        <div class="contact-info">
+            <p><strong>Téléphone:</strong> <?php echo htmlspecialchars($user['telephone'] ?: '—'); ?></p>
+            <p><strong>WhatsApp:</strong> <?php echo $user['has_whatsapp'] ? '✅ Disponible' : '❌ Non'; ?></p>
+            <p class="contact-hint">Ces informations aident recruteurs et candidats à vous contacter facilement.</p>
         </div>
+    </div>
 
-        <?php if ($user['role'] === 'recruteur'): ?>
-            <hr>
-            <h3 style="margin: 20px 0;">Mes offres publiées</h3>
+    <!-- Section Recruteur - Offres publiées -->
+    <?php if ($user['role'] === 'recruteur'): ?>
+        <div class="profile-section">
+            <h2>📋 Mes offres publiées</h2>
             <?php
-            // Certains projets n'ont pas la colonne `date_publication` — trier par `id` est plus sûr
-            $stmtJobs = $db->prepare("SELECT * FROM jobs WHERE user_id = ? ORDER BY id DESC");
-            $stmtJobs->execute([$user['id']]);
-            $myJobs = $stmtJobs->fetchAll();
+                $stmtJobs = $db->prepare("SELECT * FROM jobs WHERE user_id = ? ORDER BY id DESC");
+                $stmtJobs->execute([$user['id']]);
+                $myJobs = $stmtJobs->fetchAll();
             ?>
             
             <?php if (count($myJobs) > 0): ?>
-                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-                    <tr style="background: #f1f5f9; text-align: left;">
-                        <th style="padding: 10px;">Titre</th>
-                        <th style="padding: 10px;">Date</th>
-                        <th style="padding: 10px;">Actions</th>
-                    </tr>
-                    <?php foreach ($myJobs as $job): ?>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;"><?php echo htmlspecialchars($job['titre']); ?></td>
-                            <td style="padding: 10px;">
-                                <?php
-                                    $dateJob = null;
-                                    if (!empty($job['date_publication'])) {
-                                        $dateJob = $job['date_publication'];
-                                    } elseif (!empty($job['created_at'])) {
-                                        $dateJob = $job['created_at'];
-                                    }
-
-                                    if (!empty($dateJob) && strtotime($dateJob) !== false && strtotime($dateJob) > 0) {
-                                        echo date('d/m/Y', strtotime($dateJob));
-                                    } else {
-                                        echo '—';
-                                    }
-                                ?>
-                            </td>
-                            <td style="padding: 10px;">
-                                <a href="voir_offre.php?id=<?php echo $job['id']; ?>" class="btn-secondary">Voir</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
+                <div class="jobs-table-wrapper">
+                    <table class="jobs-table">
+                        <thead>
+                            <tr>
+                                <th>Titre de l'offre</th>
+                                <th>Date de publication</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($myJobs as $job): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($job['titre']); ?></td>
+                                    <td>
+                                        <?php
+                                            $dateJob = $job['date_publication'] ?? $job['created_at'];
+                                            if (!empty($dateJob) && strtotime($dateJob) !== false) {
+                                                echo date('d/m/Y', strtotime($dateJob));
+                                            } else {
+                                                echo '—';
+                                            }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <a href="voir_offre.php?id=<?php echo $job['id']; ?>" class="btn-secondary" style="font-size: 0.9rem; padding: 0.5rem 1rem;">Voir l'offre</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             <?php else: ?>
-                <p>Vous n'avez pas encore publié d'offres.</p>
-                <a href="poster_offre.php" class="btn-primary">Publier ma première offre →</a>
+                <div class="no-data-box">
+                    <p>Vous n'avez pas encore publié d'offres. Commencez maintenant!</p>
+                    <a href="poster_offre.php" class="btn-primary">+ Publier une offre</a>
+                </div>
             <?php endif; ?>
-        <?php endif; ?>
+        </div>
+    <?php endif; ?>
 
-            <hr style="margin-top: 30px;">
-        <h3>Mise à jour rapide des coordonnées</h3>
-        <p style="color:#6b7280; font-size:0.95rem;">Modifiez votre numéro ou indiquez si vous avez WhatsApp — cela permet aux candidats ou recruteurs de vous contacter facilement.</p>
-        <form id="update-contact" action="profil.php" method="POST" style="max-width: 500px;">
+    <!-- Section Mise à jour des coordonnées -->
+    <div class="profile-section">
+        <h2>✏️ Mettre à jour mes coordonnées</h2>
+        <form id="update-contact" action="profil.php" method="POST" class="profile-form">
             <?php csrfField(); ?>
+            
             <div class="form-group">
-                <label>Téléphone</label>
-                <input type="tel" name="telephone" value="<?php echo htmlspecialchars($user['telephone']); ?>">
+                <label for="telephone">Téléphone</label>
+                <input type="tel" id="telephone" name="telephone" value="<?php echo htmlspecialchars($user['telephone']); ?>" placeholder="Ex: 0600000000">
             </div>
-            <div class="form-group">
-                <label><input type="checkbox" name="has_whatsapp" <?php echo !empty($user['has_whatsapp']) ? 'checked' : ''; ?>> J'ai WhatsApp <span style="color:#6b7280; font-size:0.9rem;">(Permet le contact via WhatsApp)</span></label>
+
+            <div class="form-group-checkbox">
+                <label>
+                    <input type="checkbox" name="has_whatsapp" <?php echo !empty($user['has_whatsapp']) ? 'checked' : ''; ?>>
+                    <span>J'utilise WhatsApp et j'accepte les messages</span>
+                </label>
             </div>
-            <input type="hidden" name="update_contact" value="1">
-            <button type="submit" title="Enregistrer votre numéro et préférence WhatsApp">Enregistrer mes coordonnées</button>
-            <p style="margin-top:8px; color:#6b7280; font-size:0.9rem;">Après enregistrement, vos coordonnées seront affichées sur vos offres (si vous êtes recruteur).</p>
+
+            <div class="form-actions">
+                <input type="hidden" name="update_contact" value="1">
+                <button type="submit" class="btn-primary">Enregistrer les modifications</button>
+                <a href="mon_espace.php" class="btn-secondary">Voir mes candidatures</a>
+            </div>
+
+            <p class="form-hint">Vos coordonnées seront visibles sur vos offres publiées et permettront aux autres utilisateurs de vous contacter.</p>
         </form>
     </div>
 </div>

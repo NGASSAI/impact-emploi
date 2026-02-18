@@ -27,7 +27,16 @@
             </div>
         </div>
 
-        <!-- Section Info -->
+        <!-- Section Aide & Info -->
+        <div class="footer-help">
+            <strong class="footer-title">Besoin d'Aide?</strong>
+            <div class="footer-help-links">
+                <a href="aide.php" class="link" title="Consultez notre centre d'aide">📖 Centre d'aide</a>
+                <a href="index.php" class="link" title="Retourner à l'accueil">🏠 Accueil</a>
+            </div>
+        </div>
+
+        <!-- Section About -->
         <div class="footer-about">
             <strong class="footer-title">À Propos</strong>
             <p class="footer-desc">Impact Emploi est une plateforme créée pour connecter les talents locaux avec les meilleures opportunités d'emploi.</p>
