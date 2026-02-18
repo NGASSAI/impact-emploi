@@ -18,7 +18,22 @@ require_once __DIR__ . '/config.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Impact Emploi - Trouvez votre avenir</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="description" content="Plateforme d'emploi locale pour connecter talents et opportunités">
     <script src="assets/js/ui-components.js" defer></script>
+    <script>
+        // Enregistrer le Service Worker pour PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('Service Worker enregistré ✓');
+                }).catch(err => {
+                    console.log('Service Worker erreur:', err);
+                });
+            });
+        }
+    </script>
 </head>
 <body>
 
