@@ -2,8 +2,36 @@
 require_once 'includes/header.php';
 require_once 'includes/alerts.php';
 
-// ===== PROTECTION : Seul l'admin (ID 1) peut accéder ====
-if (!isset($_SESSION['user_id']) || $_SESSION['user_id'] != 1) {
+// ===== PROTECTION : Accès réservé aux administrateurs =====
+// Nouvelle logique : on autorise si
+// - l'utilisateur est connecté ET a le rôle 'admin' (champ `role` en base)
+// - OU l'email de l'utilisateur correspond à DEFAULT_ADMIN_EMAIL (constante dans config)
+$allow_admin = false;
+if (isset($_SESSION['user_id'])) {
+    // Si le rôle est présent en session et vaut 'admin'
+    if (!empty($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+        $allow_admin = true;
+    } else {
+        // Récupérer l'email/role depuis la base pour confirmer
+        try {
+            $check = $db->prepare('SELECT email, role FROM users WHERE id = ?');
+            $check->execute([$_SESSION['user_id']]);
+            $u = $check->fetch();
+            if ($u) {
+                if (isset($u['role']) && $u['role'] === 'admin') {
+                    $allow_admin = true;
+                }
+                if (defined('DEFAULT_ADMIN_EMAIL') && $u['email'] === DEFAULT_ADMIN_EMAIL) {
+                    $allow_admin = true;
+                }
+            }
+        } catch (Exception $e) {
+            error_log('Admin access check failed: ' . $e->getMessage());
+        }
+    }
+}
+
+if (!$allow_admin) {
     http_response_code(403);
     echo "<div class='container'><div class='alert alert-error'>❌ Accès refusé. Réservé à l'administrateur.</div></div>";
     require_once 'includes/footer.php';

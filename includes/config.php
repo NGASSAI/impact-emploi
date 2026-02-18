@@ -92,5 +92,32 @@ function format_phone_for_wa($phone) {
     // Sinon on suppose que le numéro est déjà en international (sans +)
     return $p;
 }
+// ===== ADMIN PAR DÉFAUT (création automatique si absent) =====
+if (!defined('DEFAULT_ADMIN_EMAIL')) {
+    define('DEFAULT_ADMIN_EMAIL', 'nathanngassai885@gmail.com');
+}
+
+if (!defined('DEFAULT_ADMIN_PASSWORD')) {
+    // Mot de passe en clair ici uniquement pour initialisation automatique.
+    // Il sera haché avant insertion en base.
+    define('DEFAULT_ADMIN_PASSWORD', 'nathan1234');
+}
+
+try {
+    // Vérifier si l'administrateur existe déjà
+    $stmt = $db->prepare('SELECT id FROM users WHERE email = ?');
+    $stmt->execute([DEFAULT_ADMIN_EMAIL]);
+    $exists = $stmt->fetch();
+    if (!$exists) {
+        // Créer le compte administrateur par défaut (nom minimal)
+        $hash = password_hash(DEFAULT_ADMIN_PASSWORD, PASSWORD_BCRYPT);
+        $ins = $db->prepare("INSERT INTO users (nom, prenom, email, telephone, role, password, has_whatsapp) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        // nom: Admin, prenom: Impact, role: admin
+        $ins->execute(['Admin', 'Impact', DEFAULT_ADMIN_EMAIL, '', 'admin', $hash, 0]);
+    }
+} catch (Exception $e) {
+    // Ne pas interrompre l'exécution si la table n'existe pas encore ou autre erreur
+    error_log('Admin default creation check failed: ' . $e->getMessage());
+}
 
 ?>
