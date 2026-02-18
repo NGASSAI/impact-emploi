@@ -61,16 +61,22 @@ if (!$job) {
         <div class="offer-share-section">
             <h3>📤 Partager cette offre</h3>
             <div class="share-buttons">
-                <button class="share-btn share-whatsapp" onclick="shareWhatsApp('Excellent job !! 👀', '<?php echo htmlspecialchars($job['titre']); ?>\n' + window.location.href)">
+                <button type="button" class="share-btn share-whatsapp" 
+                    data-job-title="<?php echo htmlspecialchars($job['titre']); ?>"
+                    data-recruiter-phone="<?php echo htmlspecialchars($job['telephone'] ?? ''); ?>"
+                    data-recruiter-name="<?php echo htmlspecialchars($job['prenom'] . ' ' . $job['nom']); ?>">
                     💬 WhatsApp
                 </button>
-                <button class="share-btn share-email" onclick="shareEmail('Offre d\'emploi: <?php echo htmlspecialchars($job['titre']); ?>', 'Découvre cette offre d\'emploi intéressante', window.location.href)">
+                <button type="button" class="share-btn share-email" 
+                    data-job-title="<?php echo htmlspecialchars($job['titre']); ?>"
+                    data-recruiter-email="<?php echo htmlspecialchars($job['email']); ?>"
+                    data-recruiter-name="<?php echo htmlspecialchars($job['prenom'] . ' ' . $job['nom']); ?>">
                     📧 Email
                 </button>
-                <button class="share-btn share-copy" onclick="copyToClipboard(window.location.href, 'Lien copié !')">
+                <button type="button" class="share-btn share-copy">
                     📋 Copier le lien
                 </button>
-                <button class="share-btn share-native" onclick="nativeShare('<?php echo htmlspecialchars($job['titre']); ?>', 'Découvre cette offre d\'emploi sur Impact Emploi', window.location.href)">
+                <button type="button" class="share-btn share-native" data-job-title="<?php echo htmlspecialchars($job['titre']); ?>">
                     📤 Partager
                 </button>
             </div>

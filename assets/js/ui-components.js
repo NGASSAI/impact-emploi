@@ -181,4 +181,65 @@ function initLazyLoading() {
 }
 
 // Initialiser au chargement du DOM
-document.addEventListener('DOMContentLoaded', initLazyLoading);
+document.addEventListener('DOMContentLoaded', function() {
+    initLazyLoading();
+    
+    // Attacher les event listeners pour les boutons partage
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const jobTitle = this.dataset.jobTitle || 'Offre d\'emploi';
+            const url = window.location.href;
+            
+            if (this.classList.contains('share-whatsapp')) {
+                const phone = this.dataset.recruiterPhone || '';
+                const recruiterName = this.dataset.recruiterName || 'le recruteur';
+                shareWhatsAppRecruiter(jobTitle, recruiterName, url);
+            } else if (this.classList.contains('share-email')) {
+                const email = this.dataset.recruiterEmail || '';
+                const recruiterName = this.dataset.recruiterName || 'le recruteur';
+                shareEmailRecruiter(jobTitle, email, recruiterName, url);
+            } else if (this.classList.contains('share-copy')) {
+                copyToClipboard(url, 'Lien copié !');
+            } else if (this.classList.contains('share-native')) {
+                nativeShare(jobTitle, 'Découvre cette offre d\'emploi sur Impact Emploi', url);
+            }
+        });
+    });
+});
+
+// WhatsApp - Contacter le recruteur
+function shareWhatsAppRecruiter(jobTitle, recruiterName, url) {
+    const phone = document.querySelector('.share-whatsapp').dataset.recruiterPhone;
+    if (!phone) {
+        showNotification('Numéro WhatsApp du recruteur non disponible', 'warning');
+        return;
+    }
+    
+    // Formater le téléphone pour wa.me (format international)
+    const waPhone = phone.replace(/[^0-9+]/g, '');
+    const message = `Bonjour ${recruiterName},\n\nJ'ai vu votre offre "${jobTitle}" sur Impact Emploi et je suis très intéressé!\n\nLien: ${url}`;
+    const encodedMsg = encodeURIComponent(message);
+    
+    window.open(`https://wa.me/${waPhone}?text=${encodedMsg}`, '_blank');
+    showNotification('✅ Ouverture WhatsApp...', 'success');
+}
+
+// Email - Envoyer une candidature au recruteur
+function shareEmailRecruiter(jobTitle, email, recruiterName, url) {
+    if (!email) {
+        showNotification('Email du recruteur non disponible', 'warning');
+        return;
+    }
+    
+    const subject = encodeURIComponent(`Candidature: ${jobTitle}`);
+    const body = encodeURIComponent(
+        `Bonjour ${recruiterName},\n\n` +
+        `Je suis très intéressé par l'offre "${jobTitle}" publiée sur Impact Emploi.\n\n` +
+        `Retrouvez l'offre ici: ${url}\n\n` +
+        `Cordialement`
+    );
+    
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    showNotification('✅ Ouverture du client email...', 'success');
+}

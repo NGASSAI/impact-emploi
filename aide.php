@@ -19,8 +19,34 @@ require_once 'includes/header.php';
             <h2>Pour les chercheurs d'emploi</h2>
             
             <div class="help-item">
-                <h3>Consulter les offres d'emploi</h3>
-                <p>Accédez à la page d'accueil pour parcourir toutes les offres d'emploi disponibles. Cliquez sur une offre pour voir les détails complets, la description du poste et les coordonnées du recruteur.</p>
+                <h3>🔍 Recherche avancée et filtres</h3>
+                <p>Sur la page d'accueil, utilisez les filtres pour trouver l'offre parfaite :</p>
+                <ul style="margin: 10px 0; padding-left: 20px; color: var(--secondary);">
+                    <li><strong>Métier/Description :</strong> Tapez un mot-clé</li>
+                    <li><strong>Localité/Ville :</strong> Filtrez par région</li>
+                    <li><strong>Type de contrat :</strong> CDI, CDD, Stage, Freelance, etc.</li>
+                </ul>
+            </div>
+
+            <div class="help-item">
+                <h3>📤 Partager les offres d'emploi</h3>
+                <p>Trouvé une offre intéressante ? Partagez-la avec vos amis :</p>
+                <ul style="margin: 10px 0; padding-left: 20px; color: var(--secondary);">
+                    <li><strong>💬 WhatsApp :</strong> Envoyez directement au recruteur ou partagez avec des amis</li>
+                    <li><strong>📧 Email :</strong> Contactez le recruteur directement</li>
+                    <li><strong>📋 Copier le lien :</strong> Partagez l'URL sur les réseaux sociaux</li>
+                    <li><strong>📤 Partager :</strong> Utilisez le menu de partage natif de votre téléphone</li>
+                </ul>
+            </div>
+
+            <div class="help-item">
+                <h3>📱 Naviguer sur mobile</h3>
+                <p>Sur téléphone, cliquez sur le bouton ≡ (hamburguer) en haut à gauche pour ouvrir le menu. Vous trouverez tous les liens de navigation. Si vous n'êtes pas connecté, vous verrez un message motivant pour vous inscrire.</p>
+            </div>
+
+            <div class="help-item">
+                <h3>💼 Consulter les offres d'emploi</h3>
+                <p>Accédez à la page d'accueil pour parcourir toutes les offres d'emploi disponibles. Cliquez sur une offre pour voir les détails complets, la description du poste et les coordonnées du recruteur. Vous pouvez contacter directement le recruteur par téléphone, WhatsApp ou email.</p>
             </div>
 
             <div class="help-item">
@@ -34,8 +60,13 @@ require_once 'includes/header.php';
             </div>
 
             <div class="help-item">
-                <h3>Contacter un recruteur</h3>
-                <p>Sur chaque offre, vous trouverez le numéro de téléphone et les coordonnées du recruteur. Appelez ou écrivez directement pour postuler ou poser des questions.</p>
+                <h3>📲 Notifications et confirmations</h3>
+                <p>Vous recevrez des notifications toast (pop-ups en haut) pour confirmer vos actions (envoi de formulaires, mise à jour du profil, copies d'URL, etc.). Les erreurs s'affichent aussi via ces notifications.</p>
+            </div>
+
+            <div class="help-item">
+                <h3>🌐 Utiliser hors ligne (PWA)</h3>
+                <p>Impact Emploi fonctionne également hors ligne ! Votre navigateur télécharge automatiquement la plateforme. Vous pouvez consulter les offres d'emploi même sans connexion Internet (sauf pour les actions nécessitant une mise à jour).</p>
             </div>
         </div>
 
@@ -71,6 +102,53 @@ require_once 'includes/header.php';
         <h2>❔ Questions fréquemment posées</h2>
 
         <div class="faq-item">
+            <h3>🔍 Comment utiliser les filtres de recherche ?</h3>
+            <p>Sur la page d'accueil, remplissez les champs de recherche :</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Entrez un mot-clé (métier, compétence, entreprise)</li>
+                <li>Sélectionnez une localité si vous voulez chercher dans une région spécifique</li>
+                <li>Choisissez un type de contrat (CDI, CDD, Stage, Freelance, Tous les types)</li>
+                <li>Cliquez sur "Chercher" pour voir les résultats</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <h3>📤 Comment partager une offre ?</h3>
+            <p>En bas de chaque offre d'emploi, vous trouverez 4 boutons :</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li><strong>💬 WhatsApp :</strong> Ouvre WhatsApp pour contacter le recruteur ou partager avec des amis</li>
+                <li><strong>📧 Email :</strong> Prépare un email à envoyer au recruteur</li>
+                <li><strong>📋 Copier le lien :</strong> Copie l'URL de l'offre dans votre presse-papiers</li>
+                <li><strong>📤 Partager :</strong> Utilise le menu de partage natif de votre système</li>
+            </ul>
+        </div>
+
+        <div class="faq-item">
+            <h3>📱 Le menu sur mobile ne s'affiche pas, pourquoi ?</h3>
+            <p>Sur les petits écrans (< 769px), cliquez sur le bouton ≡ (trois lignes) en haut à gauche. Le menu devrait s'ouvrir. Si c'est encore fermé, cliquez sur un lien du menu pour le fermer automatiquement.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>✨ Qu'est-ce que le texte motivant en mobile ?</h3>
+            <p>Quand vous n'êtes pas connecté et que vous accédez à la plateforme sur mobile, vous verrez un message animé pour vous encourager à vous inscrire. Sur desktop, vous verrez les boutons "Connexion" et "S'inscrire" normaux.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>📲 Que sont ces notifications qui s'affichent ?</h3>
+            <p>Les notifications toast sont de petits messages qui apparaissent en haut de la page pour confirmer une action (succès, erreur, avertissement). Elles disparaissent automatiquement après 3 secondes.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>🌐 Comment utiliser Impact Emploi sans Internet (PWA) ?</h3>
+            <p>Impact Emploi est une Progressive Web App (PWA). Votre navigateur télécharge automatiquement la plateforme. Même sans connexion, vous pouvez consulter les offres d'emploi téléchargées. Les actions qui nécessitent une mise à jour (candidature, création de compte) nécessitent Internet.</p>
+        </div>
+
+        <div class="faq-item">
+            <h3>Puis-je publier plusieurs offres?</h3>
+            <p>Oui! Vous pouvez publier autant d'offres que vous le souhaitez. Chaque offre apparaîtra sur la plateforme et sera disponible pour les candidats.</p>
+        </div>
+
+        <div class="faq-item">
             <h3>Comment me connecter?</h3>
             <p>Cliquez sur "Connexion" en haut de la page, entrez votre email et votre mot de passe, puis cliquez sur "Se connecter". Si vous n'avez pas de compte, créez-en un en cliquant sur "S'inscrire".</p>
         </div>
@@ -86,18 +164,13 @@ require_once 'includes/header.php';
         </div>
 
         <div class="faq-item">
-            <h3>My offre est-elle visible à tous?</h3>
+            <h3>Mon offre est-elle visible à tous?</h3>
             <p>Oui, toutes les offres publiées sont visibles sur la page d'accueil pour tous les visiteurs (connectés ou non). C'est ainsi que les candidats peuvent vous découvrir.</p>
         </div>
 
         <div class="faq-item">
             <h3>Comment supprimer mon compte?</h3>
             <p>Pour des raisons de sécurité, contactez l'administrateur via le formulaire de contact pour demander la suppression de votre compte.</p>
-        </div>
-
-        <div class="faq-item">
-            <h3>Puis-je publier plusieurs offres?</h3>
-            <p>Oui! Vous pouvez publier autant d'offres que vous le souhaitez. Chaque offre apparaîtra sur la plateforme et sera disponible pour les candidats.</p>
         </div>
     </div>
 

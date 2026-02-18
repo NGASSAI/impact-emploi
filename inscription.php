@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     <?php endif; ?>
 
-    <form action="inscription.php" method="POST">
+    <form action="inscription.php" method="POST" data-validate="true">
         <?php csrfField(); ?>
         <div class="form-group">
             <label>Vous êtes :</label>
@@ -90,22 +90,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="form-group">
             <label>Nom</label>
-            <input type="text" name="nom" required placeholder="Votre nom">
+            <input type="text" name="nom" required placeholder="Votre nom" data-validate="required|nospecial">
         </div>
 
         <div class="form-group">
             <label>Prénom</label>
-            <input type="text" name="prenom" required placeholder="Votre prénom">
+            <input type="text" name="prenom" required placeholder="Votre prénom" data-validate="required|nospecial">
         </div>
 
         <div class="form-group">
             <label>Email</label>
-            <input type="email" name="email" required placeholder="exemple@mail.com">
+            <input type="email" name="email" required placeholder="exemple@mail.com" data-validate="required|email">
         </div>
 
         <div class="form-group">
             <label>Téléphone</label>
-            <input type="tel" name="telephone" placeholder="Ex: 0600000000">
+            <input type="tel" name="telephone" placeholder="Ex: 0600000000" data-validate="phone">
         </div>
 
         <div class="form-group">
@@ -114,12 +114,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="form-group">
             <label>Mot de passe</label>
-            <input type="password" name="password" required placeholder="6 caractères minimum">
+            <input type="password" name="password" required placeholder="6 caractères minimum" data-validate="required|minlength" minlength="6">
         </div>
 
         <div class="form-group">
             <label>Confirmez le mot de passe</label>
-            <input type="password" name="confirm_password" required>
+            <input type="password" name="confirm_password" required data-validate="required|match" data-match="input[name='password']">
         </div>
 
         <button type="submit">S'inscrire gratuitement</button>

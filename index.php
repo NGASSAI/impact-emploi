@@ -5,7 +5,6 @@ require_once 'includes/config.php';
 // --- LOGIQUE DE RECHERCHE AVANCÉE ---
 $search = isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '';
 $type_contrat = isset($_GET['type']) ? htmlspecialchars($_GET['type']) : '';
-$salaire_min = isset($_GET['min_salary']) ? (int)$_GET['min_salary'] : 0;
 $lieu = isset($_GET['lieu']) ? htmlspecialchars($_GET['lieu']) : '';
 
 // Construire la requête dynamiquement
@@ -27,11 +26,6 @@ if (!empty($type_contrat)) {
 if (!empty($lieu)) {
     $where_clauses[] = "lieu LIKE ?";
     $params[] = "%$lieu%";
-}
-
-if ($salaire_min > 0) {
-    $where_clauses[] = "salaire >= ?";
-    $params[] = $salaire_min;
 }
 
 $query = "SELECT * FROM jobs";
@@ -78,26 +72,28 @@ $types_contrat = $types_stmt->fetchAll(PDO::FETCH_COLUMN);
         </div>
 
         <div class="filter-group">
-            <select name="type" class="filter-select">
-                <option value="">Tous les types de contrats</option>
-                <?php foreach($types_contrat as $type): ?>
-                    <option value="<?php echo htmlspecialchars($type); ?>" <?php echo ($type_contrat === $type) ? 'selected' : ''; ?>>
+            <select name=\"type\" class=\"filter-select\">
+                <option value=\"\">📋 Tous les contrats</option>
+                <option value=\"CDI\" <?php echo ($type_contrat === 'CDI') ? 'selected' : ''; ?>>CDI</option>
+                <option value=\"CDD\" <?php echo ($type_contrat === 'CDD') ? 'selected' : ''; ?>>CDD</option>
+                <option value=\"Stage\" <?php echo ($type_contrat === 'Stage') ? 'selected' : ''; ?>>Stage</option>
+                <option value=\"Freelance\" <?php echo ($type_contrat === 'Freelance') ? 'selected' : ''; ?>>Freelance</option>
+                <option value=\"Intérim\" <?php echo ($type_contrat === 'Intérim') ? 'selected' : ''; ?>>Intérim</option>
+                <option value=\"Alternance\" <?php echo ($type_contrat === 'Alternance') ? 'selected' : ''; ?>>Alternance</option>
+                <?php 
+                // Ajouter les autres types de la base de données qui ne sont pas dans la liste
+                $default_types = ['CDI', 'CDD', 'Stage', 'Freelance', 'Intérim', 'Alternance'];
+                foreach($types_contrat as $type): 
+                    if (!in_array($type, $default_types)):
+                ?>
+                    <option value=\"<?php echo htmlspecialchars($type); ?>\" <?php echo ($type_contrat === $type) ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($type); ?>
                     </option>
-                <?php endforeach; ?>
+                <?php 
+                    endif;
+                endforeach; 
+                ?>
             </select>
-        </div>
-
-        <div class="filter-group">
-            <input 
-                type="number" 
-                name="min_salary" 
-                placeholder="Salaire min" 
-                value="<?php echo $salaire_min; ?>"
-                class="filter-input"
-                min="0"
-                step="1000"
-            >
         </div>
 
         <div class="filter-group">

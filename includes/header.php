@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 header('X-Frame-Options: SAMEORIGIN', true);
 header('X-Content-Type-Options: nosniff', true);
 header('X-XSS-Protection: 1; mode=block', true);
-header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self';", true);
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; object-src 'none'; base-uri 'self'; form-action 'self';", true);
 
 require_once __DIR__ . '/config.php';
 ?>
@@ -21,7 +21,8 @@ require_once __DIR__ . '/config.php';
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2563eb">
     <meta name="description" content="Plateforme d'emploi locale pour connecter talents et opportunités">
-    <script src="assets/js/ui-components.js" defer></script>
+    <script src="assets/js/ui-components.js"></script>
+    <script src="assets/js/form-validation.js" defer></script>
     <script>
         // Enregistrer le Service Worker pour PWA
         if ('serviceWorker' in navigator) {
@@ -80,32 +81,65 @@ require_once __DIR__ . '/config.php';
             <a href="suggestions.php">Suggestions</a>
             <a href="deconnexion.php">Déconnexion</a>
         <?php else: ?>
+            <!-- Desktop: Boutons Connexion/Inscription -->
             <div class="nav-auth">
-                <a href="connexion.php">Connexion</a>
-                <a href="inscription.php">S'inscrire</a>
+                <a href="connexion.php" class="btn-nav">🔐 Connexion</a>
+                <a href="inscription.php" class="btn-nav">📝 S'inscrire</a>
+            </div>
+            <!-- Mobile: Texte motivant -->
+            <div class="nav-motivational">
+                <span class="pulse-text">✨ Rejoignez-nous et trouvez votre emploi idéal!</span>
             </div>
         <?php endif; ?>
     </div>
 </nav>
 
 <script>
-    // Hamburger menu toggle
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('nav-menu');
-    
-    if (hamburger) {
-        hamburger.addEventListener('click', () => {
+    // Hamburger menu toggle - FIX COMPLET
+    function initHamburger() {
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        
+        if (!hamburger || !navMenu) {
+            console.warn('Hamburger or nav-menu not found');
+            return;
+        }
+        
+        // Toggle menu au click du hamburger
+        hamburger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Hamburger clicked, toggling menu...');
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
         });
         
-        // Fermer le menu quand on clique sur un lien
+        // Fermer menu quand on clique sur un lien
         navMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
+                console.log('Link clicked in menu, closing...');
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
             });
         });
+        
+        // Fermer en cliquant dehors du menu
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('nav')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+        
+        console.log('✅ Hamburger menu initialized');
+    }
+    
+    // Attendre que le DOM soit complètement chargé
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHamburger);
+    } else {
+        // Si le script est chargé après DOMContentLoaded
+        initHamburger();
     }
 </script>
 

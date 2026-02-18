@@ -56,16 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="alert alert-error"><?php echo $error; ?></div>
     <?php endif; ?>
 
-    <form action="connexion.php" method="POST">
+    <form action="connexion.php" method="POST" data-validate="true">
         <?php csrfField(); ?>
         <div class="form-group">
             <label>Email</label>
-            <input type="email" name="email" required placeholder="votre@email.com">
+            <input type="email" name="email" required placeholder="votre@email.com" data-validate="required|email">
         </div>
 
         <div class="form-group">
             <label>Mot de passe</label>
-            <input type="password" name="password" required placeholder="Votre mot de passe">
+            <input type="password" name="password" required placeholder="Votre mot de passe" data-validate="required|minlength" minlength="6">
         </div>
 
         <button type="submit">Se connecter</button>
