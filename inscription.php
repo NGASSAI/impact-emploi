@@ -66,14 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="form-card">
     <h2>Créer un compte</h2>
-    <p style="text-align:center; margin-bottom:20px;">Rejoignez Impact Emploi</p>
+    <p class="form-page-title">Rejoignez Impact Emploi</p>
 
     <?php if($error): ?>
         <div class="alert alert-error"><?php echo $error; ?></div>
     <?php endif; ?>
 
     <?php if($success): ?>
-        <div class="alert" style="background: #d1fae5; color: #065f46; border: 1px solid #065f46;">
+        <div class="alert alert-success">
             <?php echo $success; ?>
         </div>
     <?php endif; ?>
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit">S'inscrire gratuitement</button>
     </form>
 
-    <p style="margin-top:20px; text-align:center;">
+    <p class="form-footer-text">
         Déjà inscrit ? <a href="connexion.php">Se connecter</a>
     </p>
 </div>

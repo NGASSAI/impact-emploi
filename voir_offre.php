@@ -5,6 +5,12 @@ require_once 'includes/config.php';
 // On récupère l'ID de l'offre dans l'URL
 $job_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
+if ($job_id <= 0) {
+    echo "<div class='container'><div class='alert alert-error'>Identifiant d'offre invalide.</div></div>";
+    require_once 'includes/footer.php';
+    exit;
+}
+
 // On récupère l'offre ET les infos du recruteur grâce à une JOINTURE SQL (JOIN)
 $stmt = $db->prepare("
     SELECT jobs.*, users.nom, users.prenom, users.email, users.telephone, users.has_whatsapp
@@ -16,45 +22,68 @@ $stmt->execute([$job_id]);
 $job = $stmt->fetch();
 
 if (!$job) {
-    echo "<div class='alert alert-error'>Offre introuvable.</div>";
+    echo "<div class='container'><div class='alert alert-error'>Offre introuvable.</div></div>";
     require_once 'includes/footer.php';
     exit;
 }
 ?>
 
 <div class="container">
-    <a href="index.php" style="text-decoration: none; color: var(--secondary); display: inline-block; margin-bottom: 20px;">← Retour aux offres</a>
+    <a href="index.php" class="back-link">← Retour aux offres</a>
 
     <div class="offer-container">
         <div class="offer-header">
             <div>
                 <?php if (!empty($job['image'])): ?>
-                    <img src="assets/uploads/jobs/<?php echo htmlspecialchars($job['image']); ?>" alt="<?php echo htmlspecialchars($job['titre']); ?>" style="max-width:360px; border-radius:8px; margin-bottom:12px; display:block;">
+                    <img src="assets/uploads/jobs/<?php echo htmlspecialchars($job['image']); ?>" alt="<?php echo htmlspecialchars($job['titre']); ?>" class="offer-image">
                 <?php endif; ?>
-                <span class="badge"><?php echo htmlspecialchars($job['type_contrat']); ?></span>
-                <h1 style="color: var(--primary); margin-top: 10px;"><?php echo htmlspecialchars($job['titre']); ?></h1>
-                <p style="font-size: 1.1rem; color: var(--secondary);">📍 <?php echo htmlspecialchars($job['lieu']); ?></p>
+                <div class="offer-type-section">
+                    <span class="badge"><?php echo htmlspecialchars($job['type_contrat']); ?></span>
+                </div>
             </div>
-            <div style="text-align: right; color: var(--success); font-weight: bold; font-size: 1.2rem;">
+            <div>
+                <h1 class="offer-title"><?php echo htmlspecialchars($job['titre']); ?></h1>
+                <p class="offer-location">📍 <?php echo htmlspecialchars($job['lieu']); ?></p>
+            </div>
+            <div class="offer-salary">
                 <?php echo htmlspecialchars($job['salaire'] ?: 'Salaire à débattre'); ?>
             </div>
         </div>
 
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <hr class="offer-separator">
 
         <h3>Description du poste</h3>
-        <p style="white-space: pre-wrap; margin-top: 15px; color: #475569; line-height: 1.8;">
+        <p class="offer-description">
             <?php echo htmlspecialchars($job['description']); ?>
         </p>
 
+        <!-- Section Candidature -->
         <div class="offer-contact">
-            <h3 style="color: var(--primary); margin-bottom: 15px;">Contact pour postuler</h3>
-            
+            <h3 class="offer-contact-title">Candidaturer</h3>
             <?php if (isset($_SESSION['user_id'])): ?>
-                <p><strong>Recruteur :</strong> <?php echo htmlspecialchars($job['prenom'] . ' ' . $job['nom']); ?></p>
-                <p><strong>📧 Email :</strong> <a href="mailto:<?php echo $job['email']; ?>"><?php echo htmlspecialchars($job['email']); ?></a></p>
-                <p><strong>📞 Téléphone :</strong> <a href="tel:<?php echo $job['telephone']; ?>"><?php echo htmlspecialchars($job['telephone']); ?></a></p>
-                    <?php
+                <!-- Formulaire de candidature pour les utilisateurs connectés -->
+                <form action="scripts/postuler.php" method="POST" enctype="multipart/form-data" class="offer-form">
+                    <input type="hidden" name="id_offre" value="<?php echo htmlspecialchars($job['id']); ?>">
+                    
+                    <div class="form-group">
+                        <label for="cv">📄 Télécharger votre CV (PDF uniquement, max 5MB) :</label>
+                        <input type="file" name="cv_file" id="cv" accept=".pdf" required>
+                    </div>
+                    
+                    <button type="submit" name="submit_postule" class="btn-submit">
+                        ✉️ Envoyer ma candidature
+                    </button>
+                </form>
+
+                <hr class="offer-contact-separator">
+
+                <!-- Infos recruteur -->
+                <h4 class="recruiter-title">Contact du recruteur</h4>
+                <p><strong>👤 Recruteur :</strong> <?php echo htmlspecialchars($job['prenom'] . ' ' . $job['nom']); ?></p>
+                <p><strong>📧 Email :</strong> <a href="mailto:<?php echo htmlspecialchars($job['email']); ?>"><?php echo htmlspecialchars($job['email']); ?></a></p>
+                <p><strong>📞 Téléphone :</strong> <a href="tel:<?php echo htmlspecialchars($job['telephone']); ?>"><?php echo htmlspecialchars($job['telephone']); ?></a></p>
+                
+                <?php
                     // Normaliser le numéro pour wa.me en utilisant la fonction du config
                     $waPhone = '';
                     if (!empty($job['telephone'])) {
@@ -63,16 +92,22 @@ if (!$job) {
 
                     if (!empty($job['has_whatsapp']) && !empty($waPhone)):
                 ?>
-                    <p><strong>💬 WhatsApp :</strong> <a href="https://wa.me/<?php echo $waPhone; ?>" target="_blank" rel="noopener">Contacter sur WhatsApp</a></p>
+                    <p><strong>💬 WhatsApp :</strong> <a href="https://wa.me/<?php echo htmlspecialchars($waPhone); ?>" target="_blank" rel="noopener">Contacter sur WhatsApp</a></p>
                 <?php else: ?>
-                    <p style="color: #9ca3af;">Le recruteur n'a pas indiqué WhatsApp ou le numéro est invalide.</p>
+                    <p class="recruiter-no-whatsapp">Le recruteur n'a pas indiqué WhatsApp.</p>
                 <?php endif; ?>
-                <p style="margin-top: 10px; font-size: 0.9rem; color: #64748b;"><em>Dites que vous appelez de la part de "Impact Emploi".</em></p>
+
+                <p class="recruiter-note">💡 Conseil : Mentionnez "Impact Emploi" quand vous les appelez.</p>
+
             <?php else: ?>
-                <p style="text-align: center; padding: 10px;">
-                    <strong>Connectez-vous pour voir les coordonnées du recruteur.</strong><br><br>
-                    <a href="connexion.php" class="button" style="background: var(--primary); color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Se connecter</a>
-                </p>
+                <!-- Non connecté -->
+                <div class="not-logged-in-box">
+                    <p class="lock-icon">🔐 Connectez-vous pour candidater</p>
+                    <p>Vous devez être connecté pour envoyer une candidature et voir les coordonnées du recruteur.</p>
+                    <a href="connexion.php" class="login-btn">
+                        Se connecter →
+                    </a>
+                </div>
             <?php endif; ?>
         </div>
     </div>
