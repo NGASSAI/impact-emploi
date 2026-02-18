@@ -32,7 +32,6 @@
             <strong class="footer-title">Besoin d'Aide?</strong>
             <div class="footer-help-links">
                 <a href="aide.php" class="link" title="Consultez notre centre d'aide">📖 Centre d'aide</a>
-                <a href="index.php" class="link" title="Retourner à l'accueil">🏠 Accueil</a>
             </div>
         </div>
 

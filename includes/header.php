@@ -52,6 +52,7 @@ require_once __DIR__ . '/config.php';
         }
         ?>
 
+        <a href="index.php">🏠 Accueil</a>
         <?php if(isset($_SESSION['user_id'])): ?>
             <?php if($_SESSION['user_id'] == 1): ?>
                 <a href="admin_dashboard.php">📊 Tableau de Bord</a>
