@@ -52,11 +52,12 @@ try {
                         <p class="meta">
                             <strong>📄 CV :</strong> 
                             <a href="assets/uploads/cv/<?php echo htmlspecialchars($cand['nom_cv']); ?>" 
-                               target="_blank" rel="noopener">
-                                Voir mon CV
+                               target="_blank" rel="noopener" class="btn-secondary"
+                               style="font-size:0.9rem; padding:0.5rem 1rem;">
+                                📄 Voir mon CV
                             </a>
                         </p>
-                        <a href="voir_offre.php?id=<?php echo $cand['id_offre']; ?>" class="job-detail-link">
+                        <a href="voir_offre.php?id=<?php echo $cand['id_offre']; ?>" class="btn-primary">
                             Voir l'offre →
                         </a>
                     </div>
@@ -65,7 +66,7 @@ try {
         <?php else: ?>
             <div class="no-data">
                 <p>📝 Vous n'avez pas encore envoyé de candidature.</p>
-                <a href="index.php" class="job-detail-link dashboard-action-link">
+                <a href="index.php" class="btn-primary">
                     Parcourir les offres →
                 </a>
             </div>

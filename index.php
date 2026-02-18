@@ -36,7 +36,7 @@ $jobs = $stmt->fetchAll();
     <h2>Offres récentes (<?php echo count($jobs); ?>)</h2>
     
     <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'recruteur'): ?>
-        <a href="poster_offre.php" style="background: var(--primary); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">
+        <a href="poster_offre.php" class="btn-primary">
             + Publier une offre
         </a>
     <?php endif; ?>
@@ -68,7 +68,7 @@ $jobs = $stmt->fetchAll();
                     ?>
                 </div>
                 
-                <a href="voir_offre.php?id=<?php echo $job['id']; ?>" style="display: block; margin-top: 15px; color: var(--primary); font-weight: bold;">
+                <a href="voir_offre.php?id=<?php echo $job['id']; ?>" class="btn-primary" style="margin-top: 15px;">
                     Voir les détails →
                 </a>
             </div>

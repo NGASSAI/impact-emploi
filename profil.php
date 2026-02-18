@@ -47,7 +47,7 @@ $user = $stmt->fetch();
 
         <div style="margin-bottom: 30px;">
             <p><strong>📞 Téléphone :</strong> <?php echo htmlspecialchars($user['telephone'] ?: 'Non renseigné'); ?>
-                <a href="#update-contact" style="margin-left:12px; font-size:0.9rem; text-decoration:none; color:var(--primary);" title="Modifier vos coordonnées">Modifier mes coordonnées</a>
+                <a href="#update-contact" class="inline-button" title="Modifier vos coordonnées">Modifier mes coordonnées</a>
             </p>
             <p style="color:#6b7280; font-size:0.95rem; margin-top:6px;">Indiquez votre numéro pour être contacté; cochez WhatsApp si vous acceptez d'être joint par message.</p>
             <p><strong>📅 Membre depuis le :</strong>
@@ -105,14 +105,14 @@ $user = $stmt->fetch();
                                 ?>
                             </td>
                             <td style="padding: 10px;">
-                                <a href="voir_offre.php?id=<?php echo $job['id']; ?>" style="color: var(--primary);">Voir</a>
+                                <a href="voir_offre.php?id=<?php echo $job['id']; ?>" class="btn-secondary">Voir</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </table>
             <?php else: ?>
                 <p>Vous n'avez pas encore publié d'offres.</p>
-                <a href="poster_offre.php" style="color: var(--primary); font-weight: bold;">Publier ma première offre →</a>
+                <a href="poster_offre.php" class="btn-primary">Publier ma première offre →</a>
             <?php endif; ?>
         <?php endif; ?>
 

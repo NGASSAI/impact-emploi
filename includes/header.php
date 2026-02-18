@@ -61,8 +61,10 @@ require_once __DIR__ . '/config.php';
             <a href="suggestions.php">Suggestions</a>
             <a href="deconnexion.php">Déconnexion</a>
         <?php else: ?>
-            <a href="connexion.php">Connexion</a>
-            <a href="inscription.php">S'inscrire</a>
+            <div class="nav-auth">
+                <a href="connexion.php">Connexion</a>
+                <a href="inscription.php">S'inscrire</a>
+            </div>
         <?php endif; ?>
     </div>
  </nav>

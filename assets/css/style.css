@@ -24,10 +24,186 @@ body {
     line-height: 1.6;
 }
 
-/* Animations globales */
+/* ===== ANIMATIONS GLOBALES ===== */
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hover-lift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-2px); }
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+}
+
+/* ===== BOUTONS ET LIENS ===== */
+button, .btn, a.button, a.btn, a.btn-primary, a.btn-secondary, a.btn-success, a.btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Bouton PRIMARY (Bleu) */
+button, .btn-primary, a.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+button:hover, .btn-primary:hover, a.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+button:active, .btn-primary:active, a.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Bouton SUCCESS (Vert) */
+.btn-success, a.btn-success {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:hover, a.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+/* Bouton DANGER (Rouge) */
+.btn-danger, a.btn-danger {
+    background: linear-gradient(135deg, var(--error) 0%, #dc2626 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover, a.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+/* Bouton SECONDARY (Gris) */
+.btn-secondary, a.btn-secondary {
+    background: linear-gradient(135deg, var(--secondary) 0%, #475569 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+}
+
+.btn-secondary:hover, a.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4);
+}
+
+/* Bouton OUTLINE (Bordure) */
+.btn-outline, a.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    box-shadow: none;
+}
+
+.btn-outline:hover, a.btn-outline:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* LIENS TEXTE - Propres et animés */
+a:not([class]), a.link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    transition: color 200ms ease;
+}
+
+a:not([class])::after, a.link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: width 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+a:not([class]):hover, a.link:hover {
+    color: #1d4ed8;
+}
+
+a:not([class]):hover::after, a.link:hover::after {
+    width: 100%;
+}
+
+/* Bouton "Retour" */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--secondary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 200ms ease;
+    border-radius: 6px;
+}
+
+.back-link:hover {
+    background: var(--light);
+    color: var(--primary);
+    transform: translateX(-4px);
+}
+
+/* Bouton LOGIN */
+.login-btn {
+    background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    transition: all 200ms ease;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+/* BOUTONS EN LIGNE */
+.inline-button {
+    background: var(--light);
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 150ms ease;
+    display: inline-block;
+}
+
+.inline-button:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-1px);
 }
 
 /* Applique une légère animation d'apparition */
@@ -52,13 +228,81 @@ nav {
 
 nav a {
     text-decoration: none;
-    color: var(--primary);
+    color: var(--dark);
     font-weight: 600;
     font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: all 200ms ease;
+    display: inline-block;
+    position: relative;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: width 200ms ease;
+}
+
+nav a:hover {
+    color: var(--primary);
+    background: rgba(37, 99, 235, 0.1);
+}
+
+nav a:hover::after {
+    width: 100%;
 }
 
 nav > a {
     font-size: 1.3rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+nav > a:hover::after {
+    display: none;
+}
+
+/* Boutons d'authentification dans header */
+.nav-auth {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-auth a {
+    padding: 0.7rem 1.3rem !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 200ms ease !important;
+}
+
+.nav-auth a:first-child {
+    color: var(--primary) !important;
+    background: rgba(37, 99, 235, 0.1);
+    border: 2px solid var(--primary);
+}
+
+.nav-auth a:first-child:hover {
+    background: var(--primary) !important;
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+.nav-auth a:last-child {
+    background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+.nav-auth a:last-child:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4) !important;
 }
 
 nav > div {

@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 
     <p class="form-footer-text">
-        Déjà inscrit ? <a href="connexion.php">Se connecter</a>
+        Déjà inscrit ? <a href="connexion.php" class="link">Se connecter</a>
     </p>
 </div>
 
