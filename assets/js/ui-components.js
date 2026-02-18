@@ -143,3 +143,42 @@ function nativeShare(title, text, url) {
         showNotification('Partage non supporté sur ce navigateur', 'info');
     }
 }
+
+// ===== LAZY LOADING IMAGES =====
+// Active les images lazy loading via Intersection Observer
+function initLazyLoading() {
+    if (!('IntersectionObserver' in window)) {
+        // Fallback pour navigateurs anciens
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+        });
+        return;
+    }
+
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.loading = 'lazy';
+                img.addEventListener('load', () => {
+                    img.classList.add('loaded');
+                });
+                img.addEventListener('error', () => {
+                    img.classList.add('error');
+                });
+                observer.unobserve(img);
+            }
+        });
+    }, {
+        rootMargin: '50px'
+    });
+
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+    });
+}
+
+// Initialiser au chargement du DOM
+document.addEventListener('DOMContentLoaded', initLazyLoading);

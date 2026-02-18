@@ -23,8 +23,17 @@ require_once __DIR__ . '/config.php';
 <body>
 
 <nav>
-    <a href="index.php">Impact Emploi</a>
-    <div>
+    <a href="index.php" class="nav-logo">Impact Emploi</a>
+    
+    <!-- Hamburger menu pour mobile -->
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    
+    <!-- Menu principal (mobile-friendly) -->
+    <div class="nav-menu" id="nav-menu">
         <?php
         // Afficher le badge utilisateur et déterminer si on doit afficher le lien admin
         $is_admin_link = false;
@@ -62,6 +71,27 @@ require_once __DIR__ . '/config.php';
             </div>
         <?php endif; ?>
     </div>
- </nav>
- 
- <div class="container">
+</nav>
+
+<script>
+    // Hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+    
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+        
+        // Fermer le menu quand on clique sur un lien
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+    }
+</script>
+
+<div class="container">
