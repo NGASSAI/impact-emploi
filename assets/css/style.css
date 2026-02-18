@@ -2544,3 +2544,80 @@ img[src*="uploads/jobs"] {
         align-items: flex-start;
     }
 }
+
+/* ===== PARTAGE D'OFFRES ===== */
+.offer-share-section {
+    background: linear-gradient(135deg, #f0f9ff, #f8fafc);
+    border: 2px solid #e0f2fe;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+}
+
+.offer-share-section h3 {
+    margin: 0 0 15px 0;
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+.share-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.share-btn {
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+    color: var(--dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 200ms ease;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.share-whatsapp:hover {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+}
+
+.share-email:hover {
+    background: #2563eb;
+    color: white;
+    border-color: #2563eb;
+}
+
+.share-copy:hover {
+    background: #7c3aed;
+    color: white;
+    border-color: #7c3aed;
+}
+
+.share-native:hover {
+    background: #64748b;
+    color: white;
+    border-color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .share-buttons {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .share-btn {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+}

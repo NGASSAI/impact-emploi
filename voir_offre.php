@@ -57,8 +57,26 @@ if (!$job) {
             <?php echo htmlspecialchars($job['description']); ?>
         </p>
 
-        <!-- Section Candidature -->
-        <div class="offer-contact">
+        <!-- Section Partage d'offre -->
+        <div class="offer-share-section">
+            <h3>📤 Partager cette offre</h3>
+            <div class="share-buttons">
+                <button class="share-btn share-whatsapp" onclick="shareWhatsApp('Excellent job !! 👀', '<?php echo htmlspecialchars($job['titre']); ?>\n' + window.location.href)">
+                    💬 WhatsApp
+                </button>
+                <button class="share-btn share-email" onclick="shareEmail('Offre d\'emploi: <?php echo htmlspecialchars($job['titre']); ?>', 'Découvre cette offre d\'emploi intéressante', window.location.href)">
+                    📧 Email
+                </button>
+                <button class="share-btn share-copy" onclick="copyToClipboard(window.location.href, 'Lien copié !')">
+                    📋 Copier le lien
+                </button>
+                <button class="share-btn share-native" onclick="nativeShare('<?php echo htmlspecialchars($job['titre']); ?>', 'Découvre cette offre d\'emploi sur Impact Emploi', window.location.href)">
+                    📤 Partager
+                </button>
+            </div>
+        </div>
+
+        <hr class="offer-separator">
             <h3 class="offer-contact-title">Candidaturer</h3>
             <?php if (isset($_SESSION['user_id'])): ?>
                 <!-- Formulaire de candidature pour les utilisateurs connectés -->
