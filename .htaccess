@@ -1,0 +1,21 @@
+# Règles de sécurité Apache pour Impact Emploi
+
+# ANTI-CACHE AGRESSIF - Force la revalidation à chaque requête
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Réécriture d'URL
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /test1/
+    RewriteRule ^(config\.php|database\.sql)$ - [F]
+    RewriteRule ^\.env$ - [F]
+    RewriteRule ^\.git/ - [F]
+</IfModule>

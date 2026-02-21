@@ -1,0 +1,109 @@
+📋 GUIDE DE MISE EN PRODUCTION
+================================
+
+DATE: 21 février 2026
+STATUS: ✅ TOUS LES CHANGEMENTS TESTÉS LOCALEMENT
+
+FICHIERS À UPLOADER VIA FTP
+============================
+
+NOUVEAUX FICHIERS (3):
+✨ admin_activities.php
+✨ admin_visitors.php  
+✨ setup_visitors_table.php
+
+FICHIERS MODIFIÉS (7):
+📝 config.php
+📝 admin_dashboard.php
+📝 profil.php
+📝 includes/header.php
+📝 index.php
+📝 job_detail.php
+📝 recruteur_dashboard.php
+
+
+ÉTAPES DE MISE EN PRODUCTION
+=============================
+
+1️⃣ UPLOADER LES FICHIERS (via FTP)
+   - Télécharger tous les fichiers listés ci-dessus
+   - Vérifier que le serveur exécute PHP 8.0+
+
+2️⃣ CRÉER LA TABLE VISITORS (une seule fois)
+   - Via navigateur: https://impactemploi.gt.tc/setup_visitors_table.php
+   - Ou via phpMyAdmin si disponible
+
+3️⃣ TESTER LES NOUVELLES PAGES (être connecté en admin)
+   - https://impactemploi.gt.tc/admin_activities.php
+   - https://impactemploi.gt.tc/admin_visitors.php
+   - https://impactemploi.gt.tc/admin_dashboard.php (vérifier les nouvelles cartes)
+
+4️⃣ TESTER LES CHANGEMENTS
+   - Homepage: https://impactemploi.gt.tc/ (images doivent charger progressivement)
+   - Profil: https://impactemploi.gt.tc/profil.php (bio sans double-échappement)
+   - Détail emploi: https://impactemploi.gt.tc/job_detail.php (lazy loading)
+
+5️⃣ VIDER LE CACHE NAVIGATEUR
+   - Ctrl+Shift+R (Windows, Chrome)
+   - Cmd+Shift+R (Mac)
+   - Supprimer cookies si problème de session
+
+
+RÉSUMÉ DES CHANGEMENTS
+=======================
+
+config.php:
+  ✓ function sanitize() - évite le double-échappement HTML
+  ✓ function track_visitor() - enregistre les visiteurs
+
+admin_activities.php (NOUVEAU):
+  ✓ Pagination: 30 activités par page
+  ✓ Recherche par action/description
+  ✓ Affichage IP et user agent
+
+admin_visitors.php (NOUVEAU):
+  ✓ Filtrage par date
+  ✓ Statistiques: total, IPs uniques, visiteurs inscrits
+  ✓ Tableau complet des visiteurs
+
+admin_dashboard.php:
+  ✓ Liens vers pages activités et visiteurs
+  ✓ Nouvelles cartes statistiques visiteurs
+
+profil.php:
+  ✓ Bio stockée avec sanitize() au lieu de clean()
+  ✓ Pas de double-échappement des caractères spéciaux
+
+includes/header.php:
+  ✓ Affiche default.png si avatar supprimé
+
+index.php, job_detail.php, profil.php, edit_job.php, recruteur_dashboard.php:
+  ✓ Lazy loading="lazy" sur les images
+  ✓ track_visitor() sur chaque chargement de page
+
+
+POINTS IMPORTANTS
+=================
+
+⚠️ La table 'visitors' doit être créée une seule fois
+⚠️ Ne pas supprimer setup_visitors_table.php - utile pour dépannage
+⚠️ Les visiteurs non authentifiés sont aussi trackés (user_id = NULL)
+⚠️ Le lazy loading n'affecte pas les lightbox (data-lightbox)
+
+
+ROLLBACK EN CAS DE PROBLÈME
+============================
+
+Si un changement casse le site:
+
+1. Télécharger l'ancienne version du fichier depuis le backup
+2. Supprimer les fichiers NOUVEAUX si causent erreur:
+   - admin_activities.php
+   - admin_visitors.php
+   - setup_visitors_table.php
+3. Revert config.php si les fonctions causent erreur
+
+EN CAS DE DOUTE:
+Activer le mode debug dans config.php:
+define('DEBUG_MODE', true);
+
