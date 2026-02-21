@@ -34,7 +34,7 @@ if ($is_production) {
     // PRODUCTION (InfinityFREE)
     $host = 'localhost';
     $db   = 'impact_emploi';
-    $user = 'if0_41179665'; 
+    $user = 'root'; 
     $pass = '';
 } else {
     // LOCAL (XAMPP)
