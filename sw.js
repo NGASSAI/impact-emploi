@@ -4,13 +4,7 @@
  */
 
 const CACHE_NAME = 'impact-emploi-v1';
-const ASSETS_TO_CACHE = [
-    '/Impact_Emploi/',
-    '/Impact_Emploi/index.php',
-    '/Impact_Emploi/assets/css/style.css',
-    '/Impact_Emploi/assets/js/ui-components.js',
-    '/Impact_Emploi/manifest.json'
-];
+const ASSETS_TO_CACHE = [];
 
 // Installation du Service Worker
 self.addEventListener('install', event => {

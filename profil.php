@@ -124,7 +124,7 @@ include 'includes/header.php';
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
                     <label>📱 Téléphone</label>
-                    <input type="tel" name="phone" value="<?php echo htmlspecialchars($u['telephone'] ?? ''); ?>" placeholder="Mettre à jour votre numéro">
+                    <input type="tel" name="phone" value="<?php echo htmlspecialchars_decode($u['telephone'] ?? ''); ?>" placeholder="Mettre à jour votre numéro">
                 </div>
             </div>
 
@@ -146,7 +146,7 @@ include 'includes/header.php';
             <!-- Biographie -->
             <div class="form-group">
                 <label>📝 Biographie</label>
-                <textarea name="bio" placeholder="Parlez un peu de vous..." style="min-height: 120px;"><?php echo htmlspecialchars($u['bio'] ?? ''); ?></textarea>
+                <textarea name="bio" placeholder="Parlez un peu de vous..." style="min-height: 120px;"><?php echo htmlspecialchars_decode($u['bio'] ?? ''); ?></textarea>
                 <small class="text-muted">Maximum 500 caractères</small>
             </div>
 

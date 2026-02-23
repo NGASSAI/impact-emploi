@@ -128,13 +128,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php csrfField(); ?>
         <div class="form-group">
             <label>Titre du poste</label>
-            <input type="text" name="titre" required placeholder="Ex: Menuisier qualifié, Comptable, etc.">
+            <input type="text" name="titre" required placeholder="Ex: Menuisier qualifié, Comptable, etc." value="<?php if(isset($_POST['titre'])) echo htmlspecialchars_decode($_POST['titre']); ?>">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div class="form-group">
                 <label>Lieu (Ville/Quartier)</label>
-                <input type="text" name="lieu" required placeholder="Ex: Poto-Poto, Centre-ville">
+                <input type="text" name="lieu" required placeholder="Ex: Poto-Poto, Centre-ville" value="<?php if(isset($_POST['lieu'])) echo htmlspecialchars_decode($_POST['lieu']); ?>">
             </div>
             <div class="form-group">
                 <label>Type de contrat</label>
@@ -149,12 +149,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="form-group">
             <label>Salaire (Optionnel)</label>
-            <input type="text" name="salaire" placeholder="Ex: 150.000 FCFA / mois">
+            <input type="text" name="salaire" placeholder="Ex: 150.000 FCFA / mois" value="<?php if(isset($_POST['salaire'])) echo htmlspecialchars_decode($_POST['salaire']); ?>">
         </div>
 
         <div class="form-group">
             <label>Description détaillée du poste</label>
-            <textarea name="description" rows="6" required placeholder="Expliquez les missions et les compétences requises..."></textarea>
+            <textarea name="description" rows="6" required placeholder="Expliquez les missions et les compétences requises..."><?php if(isset($_POST['description'])) echo htmlspecialchars_decode($_POST['description']); ?></textarea>
         </div>
 
         <div class="form-group">

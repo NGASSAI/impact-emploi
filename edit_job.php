@@ -145,7 +145,7 @@ include 'includes/header.php';
             <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px;">
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="titre">💼 Titre du Poste</label>
-                    <input type="text" id="titre" name="titre" value="<?php echo htmlspecialchars($job['titre']); ?>" required style="padding: 12px;">
+                    <input type="text" id="titre" name="titre" value="<?php echo htmlspecialchars_decode($job['titre']); ?>" required style="padding: 12px;">
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="type_contrat">📋 Type de Contrat</label>
@@ -161,7 +161,7 @@ include 'includes/header.php';
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="lieu">📍 Lieu de Travail</label>
-                    <input type="text" id="lieu" name="lieu" value="<?php echo htmlspecialchars($job['lieu']); ?>" required style="padding: 12px;">
+                    <input type="text" id="lieu" name="lieu" value="<?php echo htmlspecialchars_decode($job['lieu']); ?>" required style="padding: 12px;">
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="salaire">💰 Salaire (FCFA)</label>
@@ -171,12 +171,12 @@ include 'includes/header.php';
 
             <div class="form-group">
                 <label for="description">📝 Description du Poste</label>
-                <textarea id="description" name="description" required style="min-height: 150px; padding: 12px;"><?php echo htmlspecialchars($job['description']); ?></textarea>
+                <textarea id="description" name="description" required style="min-height: 150px; padding: 12px;"><?php echo htmlspecialchars_decode($job['description']); ?></textarea>
             </div>
 
             <div class="form-group">
                 <label for="competences">🎯 Compétences Requises</label>
-                <textarea id="competences" name="competences" style="min-height: 100px; padding: 12px;"><?php echo htmlspecialchars($job['competences'] ?? ''); ?></textarea>
+                <textarea id="competences" name="competences" style="min-height: 100px; padding: 12px;"><?php echo htmlspecialchars_decode($job['competences'] ?? ''); ?></textarea>
             </div>
 
             <!-- Image Management Section -->

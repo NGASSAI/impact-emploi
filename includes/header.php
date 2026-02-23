@@ -56,14 +56,14 @@ require_once dirname(__DIR__) . '/config.php';
                 
                 <?php if($_SESSION['auth_role'] === 'admin'): ?>
                     <a href="<?php echo BASE_URL; ?>/admin_dashboard.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;">📊 Tableau de Bord</a>
-                        <a href="<?php echo BASE_URL; ?>/health-check.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;">✅ Santé du Site</a>
+                        <a href="<?php echo BASE_URL; ?>/sante.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;">✅ Santé du Site</a>
                 <?php elseif($_SESSION['auth_role'] === 'recruteur'): ?>
                     <a href="<?php echo BASE_URL; ?>/recruteur_dashboard.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;">👥 Candidatures</a>
                 <?php elseif($_SESSION['auth_role'] === 'candidat'): ?>
                     <a href="<?php echo BASE_URL; ?>/candidat_dashboard.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;">📋 Mes Candidatures</a>
                 <?php endif; ?>
                 
-                <a href="<?php echo BASE_URL; ?>/help.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;" title="Afficher l'aide">❓ Aide</a>
+                <a href="/aide.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;" title="Afficher l'aide">❓ Aide</a>
                 <a href="<?php echo BASE_URL; ?>/resources.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;" title="Ressources">📚 Ressources</a>
                 <a href="<?php echo BASE_URL; ?>/feedback.php" style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px;" title="Envoyer un feedback">💬 Feedback</a>
                 

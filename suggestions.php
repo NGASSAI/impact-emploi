@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="form-group">
             <label>Votre message</label>
-            <textarea name="message" rows="5" required placeholder="Expliquez-nous en détail..." style="resize: none;"></textarea>
+            <textarea name="message" rows="5" required placeholder="Expliquez-nous en détail..." style="resize: none;"><?php if(isset($_POST['message'])) echo htmlspecialchars_decode($_POST['message']); ?></textarea>
         </div>
 
         <button type="submit" style="background: var(--success);">Envoyer mon message</button>

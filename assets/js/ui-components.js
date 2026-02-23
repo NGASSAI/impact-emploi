@@ -183,7 +183,33 @@ function initLazyLoading() {
 // Initialiser au chargement du DOM
 document.addEventListener('DOMContentLoaded', function() {
     initLazyLoading();
-    
+
+    // MENU MOBILE : fermeture auto après clic sur un lien
+    var navToggle = document.getElementById('navToggle');
+    var navLinks = document.getElementById('navLinks');
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('open');
+            // Empêche le scroll du body quand le menu est ouvert
+            if(navLinks.classList.contains('open')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
+        navLinks.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        });
+        // Ferme le menu si on change de taille d'écran (orientation, clavier, etc.)
+        window.addEventListener('resize', function() {
+            navLinks.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+    }
+
     // Attacher les event listeners pour les boutons partage
     document.querySelectorAll('.share-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {

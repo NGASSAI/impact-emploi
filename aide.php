@@ -1,15 +1,18 @@
 <?php
+require_once 'includes/csrf.php';
+generateCSRFToken();
 require_once 'includes/header.php';
 ?>
 
-<div class="container help-page">
+<div class="container help-page" style="font-family: Arial, Helvetica, sans-serif; color: #222;">
     <div style="margin-bottom: 40px;">
         <a href="index.php" class="back-link">← Retour à l'accueil</a>
     </div>
 
     <div class="help-header">
         <h1>❓ Centre d'aide et guides</h1>
-        <p>Bienvenue dans le centre d'aide d'Impact Emploi. Trouvez les réponses à vos questions et apprenez à naviguer sur la plateforme.</p>
+        <p style="color:#222; background:none;">Bienvenue dans le centre d'aide d'Impact Emploi.<br>
+        Retrouvez ici toutes les explications pour utiliser la plateforme, installer l'application, gérer votre profil, publier ou postuler, et résoudre les problèmes courants.</p>
     </div>
 
     <div class="help-grid">
@@ -20,7 +23,7 @@ require_once 'includes/header.php';
             
             <div class="help-item">
                 <h3>🔍 Recherche avancée et filtres</h3>
-                <p>Sur la page d'accueil, utilisez les filtres pour trouver l'offre parfaite :</p>
+                <p style="color:#222; background:none;">Sur la page d'accueil, utilisez les filtres pour trouver l'offre parfaite :</p>
                 <ul style="margin: 10px 0; padding-left: 20px; color: var(--secondary);">
                     <li><strong>Métier/Description :</strong> Tapez un mot-clé</li>
                     <li><strong>Localité/Ville :</strong> Filtrez par région</li>
@@ -30,7 +33,7 @@ require_once 'includes/header.php';
 
             <div class="help-item">
                 <h3>📤 Partager les offres d'emploi</h3>
-                <p>Trouvé une offre intéressante ? Partagez-la avec vos amis :</p>
+                <p style="color:#222; background:none;">Trouvé une offre intéressante ? Partagez-la avec vos amis :</p>
                 <ul style="margin: 10px 0; padding-left: 20px; color: var(--secondary);">
                     <li><strong>💬 WhatsApp :</strong> Envoyez directement au recruteur ou partagez avec des amis</li>
                     <li><strong>📧 Email :</strong> Contactez le recruteur directement</li>
@@ -40,33 +43,49 @@ require_once 'includes/header.php';
             </div>
 
             <div class="help-item">
-                <h3>📱 Naviguer sur mobile</h3>
-                <p>Sur téléphone, cliquez sur le bouton ≡ (hamburguer) en haut à gauche pour ouvrir le menu. Vous trouverez tous les liens de navigation. Si vous n'êtes pas connecté, vous verrez un message motivant pour vous inscrire.</p>
+                <h3>📱 Navigation sur mobile</h3>
+                <p>Sur mobile, cliquez sur le bouton ≡ (trois lignes) en haut à gauche pour ouvrir le menu. Le menu s'affiche en superposition : cliquez sur un lien pour le fermer automatiquement.<br>
+                Si le menu bloque la navigation ou ne se ferme pas, actualisez la page ou signalez le problème via le formulaire de contact.</p>
             </div>
 
             <div class="help-item">
                 <h3>💼 Consulter les offres d'emploi</h3>
-                <p>Accédez à la page d'accueil pour parcourir toutes les offres d'emploi disponibles. Cliquez sur une offre pour voir les détails complets, la description du poste et les coordonnées du recruteur. Vous pouvez contacter directement le recruteur par téléphone, WhatsApp ou email.</p>
+                <p>Accédez à la page d'accueil pour parcourir toutes les offres d'emploi disponibles. Cliquez sur une offre pour voir les détails complets, la description du poste et les coordonnées du recruteur.<br>
+                Les images des offres sont optimisées pour le chargement rapide, mais peuvent prendre quelques secondes selon votre connexion.<br>
+                Vous pouvez contacter le recruteur par téléphone, WhatsApp ou email.</p>
             </div>
 
             <div class="help-item">
                 <h3>Créer un compte</h3>
-                <p>Cliquez sur "S'inscrire" en haut de la page. Remplissez vos informations (nom, prénom, email) et choisissez le rôle "Chercheur d'emploi". Vérifiez votre email après l'inscription.</p>
+                <p>Cliquez sur "S'inscrire" en haut de la page. Remplissez vos informations (nom, prénom, email, téléphone). Choisissez le rôle "Chercheur d'emploi" ou "Recruteur" selon votre besoin.<br>
+                Après inscription, vérifiez votre email pour activer votre compte.</p>
             </div>
 
             <div class="help-item">
                 <h3>Gérer mon profil</h3>
-                <p>Une fois connecté, accédez à votre profil pour ajouter votre numéro de téléphone. Si vous utilisez WhatsApp, indiquez-le pour que les recruteurs puissent vous contacter facilement.</p>
+                <p>Une fois connecté, accédez à votre profil pour modifier vos informations (nom, prénom, email, téléphone, photo, bio).<br>
+                Cochez "WhatsApp" si vous souhaitez être contacté par ce moyen.<br>
+                Les caractères spéciaux s'affichent correctement dans tous les champs de texte.</p>
             </div>
 
             <div class="help-item">
                 <h3>📲 Notifications et confirmations</h3>
-                <p>Vous recevrez des notifications toast (pop-ups en haut) pour confirmer vos actions (envoi de formulaires, mise à jour du profil, copies d'URL, etc.). Les erreurs s'affichent aussi via ces notifications.</p>
+                <p>Vous recevrez des notifications toast (pop-ups en haut) pour confirmer vos actions (envoi de formulaires, mise à jour du profil, copies d'URL, etc.).<br>
+                Les erreurs s'affichent aussi via ces notifications.<br>
+                Sur mobile, elles sont visibles en haut de l'écran.</p>
             </div>
 
             <div class="help-item">
-                <h3>🌐 Utiliser hors ligne (PWA)</h3>
-                <p>Impact Emploi fonctionne également hors ligne ! Votre navigateur télécharge automatiquement la plateforme. Vous pouvez consulter les offres d'emploi même sans connexion Internet (sauf pour les actions nécessitant une mise à jour).</p>
+                <h3>🌐 Installer l'application et utiliser hors ligne (PWA)</h3>
+                <p>Impact Emploi fonctionne également hors ligne : votre navigateur télécharge automatiquement la plateforme.<br>
+                Pour installer l'application sur votre téléphone :</p>
+                <ul style="margin: 10px 0; padding-left: 20px; color: var(--secondary);">
+                    <li><strong>Sur Chrome/Edge (Android) :</strong> Ouvrez le menu <b>⋮</b> (trois points) en haut à droite et choisissez <b>"Installer l'application"</b>. L'icône Impact Emploi s'affichera sur votre écran d'accueil.</li>
+                    <li><strong>Sur Safari (iPhone) :</strong> Ouvrez le menu <b>Partager</b> puis choisissez <b>"Ajouter à l'écran d'accueil"</b>. L'icône Impact Emploi s'affichera sur votre écran d'accueil.</li>
+                    <li><strong>Sur certains navigateurs :</strong> L'option peut ne pas apparaître ou proposer d'autres applications. Dans ce cas, vérifiez le menu du navigateur ou consultez la documentation de votre navigateur.</li>
+                </ul>
+                <p style="color:#222; background:none;">Après installation, vous aurez une icône Impact Emploi sur votre écran d'accueil et pourrez utiliser la plateforme même hors connexion (sauf pour les actions nécessitant Internet).<br>
+                Si l'icône ou le logo ne s'affiche pas correctement, vérifiez que votre navigateur accepte les icônes PWA ou contactez le support.</p>
             </div>
         </div>
 
@@ -74,25 +93,23 @@ require_once 'includes/header.php';
         <div class="help-card">
             <div class="help-card-icon">👔</div>
             <h2>Pour les recruteurs</h2>
-            
             <div class="help-item">
                 <h3>Publier une offre d'emploi</h3>
-                <p>Connectez-vous à votre compte recruteur. Cliquez sur "Publier une offre" et remplissez le formulaire avec le titre du poste, la description, le type de contrat et les qualifications requises.</p>
+                <p>Connectez-vous à votre compte recruteur. Cliquez sur "Publier une offre" et remplissez le formulaire avec le titre du poste, la description, le type de contrat, le lieu, le salaire, et les qualifications requises.<br>
+                Ajoutez une image pour rendre votre offre plus attractive (chargement optimisé).</p>
             </div>
-
             <div class="help-item">
                 <h3>Gérer mes offres</h3>
-                <p>Sur votre profil, consultez la liste de toutes vos offres publiées. Vous pouvez voir la date de publication et accéder à chaque offre pour vérifier les informations.</p>
+                <p>Sur votre profil, consultez la liste de toutes vos offres publiées. Vous pouvez voir la date de publication, modifier ou supprimer une offre, et vérifier les informations.</p>
             </div>
-
             <div class="help-item">
                 <h3>Être contacté par les candidats</h3>
-                <p>Assurez-vous que votre numéro de téléphone est à jour dans votre profil. Les candidats pourront vous contacter directement via le numéro affiché sur vos offres.</p>
+                <p>Assurez-vous que votre numéro de téléphone et votre email sont à jour dans votre profil. Les candidats pourront vous contacter directement via le numéro affiché sur vos offres, par WhatsApp ou par email.</p>
             </div>
-
             <div class="help-item">
                 <h3>Améliorer votre profil</h3>
-                <p>Activez WhatsApp dans votre profil pour permettre aux candidats de vous contacter aussi par message. Plus votre profil est complet, plus les candidats seront enclins à postuler.</p>
+                <p>Activez WhatsApp dans votre profil pour permettre aux candidats de vous contacter aussi par message.<br>
+                Plus votre profil est complet (photo, description, coordonnées), plus les candidats seront enclins à postuler.</p>
             </div>
         </div>
     </div>
@@ -124,8 +141,9 @@ require_once 'includes/header.php';
         </div>
 
         <div class="faq-item">
-            <h3>📱 Le menu sur mobile ne s'affiche pas, pourquoi ?</h3>
-            <p>Sur les petits écrans (< 769px), cliquez sur le bouton ≡ (trois lignes) en haut à gauche. Le menu devrait s'ouvrir. Si c'est encore fermé, cliquez sur un lien du menu pour le fermer automatiquement.</p>
+            <h3>📱 Navigation sur mobile</h3>
+            <p>Sur les petits écrans (&lt; 769px), cliquez sur le bouton ≡ (trois lignes) en haut à gauche pour ouvrir le menu. Le menu s'affiche en superposition : cliquez sur un lien pour le fermer automatiquement.<br>
+            Si le menu bloque la navigation, actualisez la page ou signalez le problème via le formulaire de contact.</p>
         </div>
 
         <div class="faq-item">
@@ -134,13 +152,16 @@ require_once 'includes/header.php';
         </div>
 
         <div class="faq-item">
-            <h3>📲 Que sont ces notifications qui s'affichent ?</h3>
-            <p>Les notifications toast sont de petits messages qui apparaissent en haut de la page pour confirmer une action (succès, erreur, avertissement). Elles disparaissent automatiquement après 3 secondes.</p>
+            <h3>📲 Notifications et confirmations</h3>
+            <p>Les notifications toast sont de petits messages qui apparaissent en haut de la page pour confirmer une action (succès, erreur, avertissement). Elles disparaissent automatiquement après quelques secondes. Sur mobile, elles sont visibles en haut de l'écran.</p>
         </div>
 
         <div class="faq-item">
-            <h3>🌐 Comment utiliser Impact Emploi sans Internet (PWA) ?</h3>
-            <p>Impact Emploi est une Progressive Web App (PWA). Votre navigateur télécharge automatiquement la plateforme. Même sans connexion, vous pouvez consulter les offres d'emploi téléchargées. Les actions qui nécessitent une mise à jour (candidature, création de compte) nécessitent Internet.</p>
+            <h3>🌐 Installer l'application et utiliser hors ligne (PWA)</h3>
+            <p>Impact Emploi est une Progressive Web App (PWA). Votre navigateur télécharge automatiquement la plateforme.<br>
+            Pour installer l'application, suivez les instructions selon votre navigateur (voir plus haut).<br>
+            Même sans connexion, vous pouvez consulter les offres d'emploi téléchargées. Les actions qui nécessitent une mise à jour (candidature, création de compte) nécessitent Internet.<br>
+            Si l'icône ou le logo ne s'affiche pas correctement, contactez le support.</p>
         </div>
 
         <div class="faq-item">
@@ -181,6 +202,80 @@ require_once 'includes/header.php';
         <p style="margin-top: 15px; color: var(--secondary); font-size: 0.95rem;">Impact Emploi — Plateforme d'emploi locale et communautaire</p>
     </div>
 </div>
+
+<!-- Message PWA/app mobile -->
+
+<div id="pwa-prompt" style="display:none; background: #f0f9ff; border: 2px solid #0284c7; color: #222; padding: 18px; border-radius: 10px; margin: 30px auto; max-width: 500px; text-align: center; font-size: 1.1rem;">
+    <span id="pwa-message">📲 Pour une expérience optimale, installez Impact Emploi sur votre téléphone !<br>
+    <span style="font-size:0.95em; color:var(--secondary);">Selon votre navigateur, l'option <b>Installer l'application</b> ou <b>Ajouter à l'écran d'accueil</b> peut apparaître dans le menu <b>⋮</b> ou <b>Partager</b>. Si ce n'est pas le cas, consultez la documentation de votre navigateur.</span></span><br><br>
+    <button id="pwa-install-btn" style="display:none;background:#0284c7;color:#fff;border:none;padding:10px 22px;border-radius:6px;font-size:1em;cursor:pointer;">Installer l'application</button>
+    <span id="pwa-fallback" style="display:none;font-size:0.98em;color:#0284c7;"></span>
+</div>
+
+<script>
+// Gestion native de l'installation PWA (beforeinstallprompt) + fallback
+let deferredPrompt = null;
+const pwaPrompt = document.getElementById('pwa-prompt');
+const installBtn = document.getElementById('pwa-install-btn');
+const fallbackMsg = document.getElementById('pwa-fallback');
+const pwaMessage = document.getElementById('pwa-message');
+
+function isStandalone() {
+    return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true);
+}
+
+function showFallback() {
+    fallbackMsg.style.display = 'block';
+    fallbackMsg.innerHTML = 'Ouvrez le menu <b>Partager</b> de votre navigateur puis choisissez <b>"Ajouter à l\'écran d\'accueil"</b>.';
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    if (isStandalone()) {
+        // Déjà installée, ne rien afficher
+        pwaPrompt.style.display = 'none';
+        return;
+    }
+    // Si mobile
+    if (window.matchMedia('(max-width: 800px)').matches) {
+        pwaPrompt.style.display = 'block';
+    }
+    // Fallback si beforeinstallprompt ne se déclenche pas
+    setTimeout(function() {
+        if (!deferredPrompt && pwaPrompt.style.display === 'block') {
+            installBtn.style.display = 'none';
+            showFallback();
+        }
+    }, 3500);
+});
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (window.matchMedia('(max-width: 800px)').matches) {
+        pwaPrompt.style.display = 'block';
+        installBtn.style.display = 'inline-block';
+        fallbackMsg.style.display = 'none';
+    }
+});
+
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                pwaMessage.innerHTML = '✅ Merci ! Application installée sur votre appareil.';
+                installBtn.style.display = 'none';
+                fallbackMsg.style.display = 'none';
+            } else {
+                pwaMessage.innerHTML = 'Installation annulée. Vous pourrez réessayer plus tard.';
+            }
+            pwaPrompt.style.display = 'block';
+            deferredPrompt = null;
+        }
+    });
+}
+</script>
 
 <!-- CSS personnalisé pour la page d'aide -->
 <style>

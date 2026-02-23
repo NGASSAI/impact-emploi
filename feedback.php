@@ -61,7 +61,7 @@ include 'includes/header.php';
 
             <div class="form-group">
                 <label for="sujet">📌 Sujet</label>
-                <input type="text" id="sujet" name="sujet" 
+                <input type="text" id="sujet" name="sujet" value="<?php if(isset($_POST['sujet'])) echo htmlspecialchars_decode($_POST['sujet']); ?>"
                        value="<?php echo htmlspecialchars($_POST['sujet'] ?? ''); ?>" 
                        placeholder="Ex: Demande de fonctionnalité, Signaler un bug..." 
                        required style="padding: 12px;">
@@ -70,7 +70,7 @@ include 'includes/header.php';
 
             <div class="form-group">
                 <label for="message">📝 Message</label>
-                <textarea id="message" name="message" 
+                <textarea id="message" name="message" ><?php if(isset($_POST['message'])) echo htmlspecialchars_decode($_POST['message']); ?></textarea>
                           placeholder="Décrivez votre feedback en détail..."
                           required style="min-height: 180px; padding: 12px;"></textarea>
                 <small style="color: #666;">Minimum 10 caractères</small>

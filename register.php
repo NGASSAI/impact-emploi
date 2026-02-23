@@ -98,22 +98,22 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="nom">👤 Nom</label>
-                    <input type="text" id="nom" name="nom" placeholder="Votre nom" required style="padding: 12px;" value="<?php echo htmlspecialchars($old['nom'] ?? ''); ?>">
+                    <input type="text" id="nom" name="nom" placeholder="Votre nom" required style="padding: 12px;" value="<?php echo htmlspecialchars_decode($old['nom'] ?? ''); ?>">
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="prenom">👤 Prénom</label>
-                    <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" required style="padding: 12px;" value="<?php echo htmlspecialchars($old['prenom'] ?? ''); ?>">
+                    <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" required style="padding: 12px;" value="<?php echo htmlspecialchars_decode($old['prenom'] ?? ''); ?>">
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="email">📧 Email</label>
-                <input type="email" id="email" name="email" placeholder="votre@email.com" required style="padding: 12px;" value="<?php echo htmlspecialchars($old['email'] ?? ''); ?>">
+                <input type="email" id="email" name="email" placeholder="votre@email.com" required style="padding: 12px;" value="<?php echo htmlspecialchars_decode($old['email'] ?? ''); ?>">
             </div>
 
             <div class="form-group">
                 <label for="telephone">📱 Téléphone</label>
-                <input type="tel" id="telephone" name="telephone" placeholder="+242 XXX XXX XXX" required style="padding: 12px;" value="<?php echo htmlspecialchars($old['telephone'] ?? ''); ?>">
+                <input type="tel" id="telephone" name="telephone" placeholder="+242 XXX XXX XXX" required style="padding: 12px;" value="<?php echo htmlspecialchars_decode($old['telephone'] ?? ''); ?>">
             </div>
 
             <div class="form-group">

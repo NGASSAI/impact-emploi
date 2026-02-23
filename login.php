@@ -1,5 +1,10 @@
+
+
 <?php 
-require_once 'config.php'; 
+require_once 'config.php';
+require_once 'includes/csrf.php';
+// Toujours régénérer le token à chaque affichage du formulaire pour éviter les soucis de session mobile
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 include 'includes/header.php'; 
 ?>
 

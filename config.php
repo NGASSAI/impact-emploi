@@ -1,6 +1,8 @@
 <?php
 // ========== SÉCURITÉ & CONFIGURATION ==========
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 date_default_timezone_set('Africa/Brazzaville');
 
 // Headers de sécurité
