@@ -66,8 +66,8 @@ include 'includes/header.php';
         <div>
             <!-- Image -->
             <?php if(!empty($job['image_offre'])): ?>
-                <img src="<?php echo BASE_URL; ?>/uploads/jobs/<?php echo htmlspecialchars($job['image_offre']); ?>" 
-                     alt="Image offre" data-lightbox loading="lazy" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 25px; cursor: pointer;">
+                <img src="<?php echo BASE_URL; ?>/uploads/jobs/<?php echo htmlspecialchars($job['image_offre']); ?>"
+                     alt="Image offre" class="job-photo" data-lightbox loading="lazy" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 25px; cursor: pointer;">
             <?php endif; ?>
 
             <!-- Titre et infos principales -->

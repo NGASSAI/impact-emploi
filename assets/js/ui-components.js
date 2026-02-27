@@ -125,105 +125,191 @@ function copyToClipboard(text, message = 'Copié !') {
 
 // Partage WhatsApp
 function shareWhatsApp(text, url = '') {
-    const message = encodeURIComponent(`${text}\n${url}`);
-    window.open(`https://wa.me/?text=${message}`, '_blank');
+    const message = encodeURIComponent(text + '\n' + url);
+    window.open('https://wa.me/?text=' + message, '_blank');
 }
 
 // Partage Email
 function shareEmail(subject, body, url = '') {
-    const message = encodeURIComponent(`${body}\n${url}`);
-    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${message}`;
+    const message = encodeURIComponent(body + '\n' + url);
+    window.location.href = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + message;
 }
 
 // Impression/Partage natif
 function nativeShare(title, text, url) {
     if (navigator.share) {
-        navigator.share({ title, text, url }).catch(err => console.log('Partage échoué:', err));
+        navigator.share({ title: title, text: text, url: url }).catch(function(err) { console.log('Partage échoué:', err); });
     } else {
         showNotification('Partage non supporté sur ce navigateur', 'info');
     }
 }
 
-// ===== LAZY LOADING IMAGES =====
-// Active les images lazy loading via Intersection Observer
+// ===== LAZY LOADING IMAGES AMÉLIORÉ =====
 function initLazyLoading() {
+    // Configuration de l'Intersection Observer pour le lazy loading
     if (!('IntersectionObserver' in window)) {
         // Fallback pour navigateurs anciens
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
+        document.querySelectorAll('img[data-src]').forEach(function(img) {
+            if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+            }
+        });
+        // Ajouter loading="lazy" à toutes les images qui n'en ont pas
+        document.querySelectorAll('img:not([loading])').forEach(function(img) {
+            img.setAttribute('loading', 'lazy');
         });
         return;
     }
 
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
+    var imageObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(function(entry) {
             if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
+                var img = entry.target;
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                }
                 img.loading = 'lazy';
-                img.addEventListener('load', () => {
+                img.addEventListener('load', function() {
                     img.classList.add('loaded');
                 });
-                img.addEventListener('error', () => {
+                img.addEventListener('error', function() {
                     img.classList.add('error');
                 });
                 observer.unobserve(img);
             }
         });
     }, {
-        rootMargin: '50px'
+        rootMargin: '100px',
+        threshold: 0.01
     });
 
-    document.querySelectorAll('img[data-src]').forEach(img => {
+    // Observer les images avec data-src
+    document.querySelectorAll('img[data-src]').forEach(function(img) {
         imageObserver.observe(img);
+    });
+
+    // Ajouter loading="lazy" à toutes les images sans data-src
+    document.querySelectorAll('img:not([loading]):not([data-src])').forEach(function(img) {
+        img.setAttribute('loading', 'lazy');
+    });
+}
+
+// ===== MOBILE MENU AMÉLIORÉ =====
+function initMobileMenu() {
+    var navToggle = document.getElementById('navToggle');
+    var navLinks = document.getElementById('navLinks');
+    
+    if (!navToggle || !navLinks) return;
+
+    // Fonction pour ouvrir/fermer le menu
+    var toggleMenu = function(forceClose) {
+        if (forceClose) {
+            navLinks.classList.remove('open');
+            document.body.style.overflow = '';
+            navToggle.setAttribute('aria-expanded', 'false');
+        } else {
+            var isOpen = navLinks.classList.contains('open');
+            navLinks.classList.toggle('open');
+            document.body.style.overflow = isOpen ? '' : 'hidden';
+            navToggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        }
+    };
+
+    // Toggle au clic sur le hamburger
+    navToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMenu();
+    });
+
+    // Ajouter un bouton de fermeture réel dans le menu
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'nav-close-btn';
+    closeBtn.innerHTML = '✕';
+    closeBtn.setAttribute('aria-label', 'Fermer le menu');
+    closeBtn.style.cssText = 'position:absolute;top:18px;right:20px;font-size:1.8rem;background:transparent;border:none;color:white;cursor:pointer;padding:8px;line-height:1;z-index:1002;';
+    navLinks.insertBefore(closeBtn, navLinks.firstChild);
+
+    // Gestionnaire pour le bouton de fermeture
+    closeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMenu(true);
+    });
+
+    // Fermer après clic sur un lien
+    navLinks.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+            toggleMenu(true);
+        });
+    });
+
+    // Fermer si on change de taille d'écran
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            toggleMenu(true);
+        }
+    });
+
+    // Fermer avec la touche ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+            toggleMenu(true);
+        }
+    });
+}
+
+// ===== OPTIMISATION DES IMAGES =====
+function optimizeImages() {
+    // Ajouter decode="async" aux images pour un meilleur chargement
+    document.querySelectorAll('img').forEach(function(img) {
+        if (!img.hasAttribute('decode')) {
+            img.setAttribute('decode', 'async');
+        }
+    });
+
+    // Gestion des erreurs d'images
+    document.querySelectorAll('img').forEach(function(img) {
+        img.addEventListener('error', function() {
+            this.classList.add('image-error');
+        });
+    });
+}
+
+// ===== PRE-LOAD CRITICAL IMAGES =====
+function preloadCriticalImages() {
+    // Précharger les images critiques (logo, icônes)
+    var criticalImages = [
+        './assets/img/icon-192.png',
+        './assets/img/icon-512.png'
+    ];
+    
+    criticalImages.forEach(function(src) {
+        var img = new Image();
+        img.src = src;
     });
 }
 
 // Initialiser au chargement du DOM
 document.addEventListener('DOMContentLoaded', function() {
     initLazyLoading();
-
-    // MENU MOBILE : fermeture auto après clic sur un lien
-    var navToggle = document.getElementById('navToggle');
-    var navLinks = document.getElementById('navLinks');
-    if (navToggle && navLinks) {
-        navToggle.addEventListener('click', function() {
-            navLinks.classList.toggle('open');
-            // Empêche le scroll du body quand le menu est ouvert
-            if(navLinks.classList.contains('open')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        });
-        navLinks.querySelectorAll('a').forEach(function(link) {
-            link.addEventListener('click', function() {
-                navLinks.classList.remove('open');
-                document.body.style.overflow = '';
-            });
-        });
-        // Ferme le menu si on change de taille d'écran (orientation, clavier, etc.)
-        window.addEventListener('resize', function() {
-            navLinks.classList.remove('open');
-            document.body.style.overflow = '';
-        });
-    }
+    initMobileMenu();
+    optimizeImages();
 
     // Attacher les event listeners pour les boutons partage
-    document.querySelectorAll('.share-btn').forEach(btn => {
+    document.querySelectorAll('.share-btn').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
-            const jobTitle = this.dataset.jobTitle || 'Offre d\'emploi';
-            const url = window.location.href;
+            var jobTitle = this.dataset.jobTitle || 'Offre d\'emploi';
+            var url = window.location.href;
             
             if (this.classList.contains('share-whatsapp')) {
-                const phone = this.dataset.recruiterPhone || '';
-                const recruiterName = this.dataset.recruiterName || 'le recruteur';
+                var phone = this.dataset.recruiterPhone || '';
+                var recruiterName = this.dataset.recruiterName || 'le recruteur';
                 shareWhatsAppRecruiter(jobTitle, recruiterName, url);
             } else if (this.classList.contains('share-email')) {
-                const email = this.dataset.recruiterEmail || '';
-                const recruiterName = this.dataset.recruiterName || 'le recruteur';
+                var email = this.dataset.recruiterEmail || '';
+                var recruiterName = this.dataset.recruiterName || 'le recruteur';
                 shareEmailRecruiter(jobTitle, email, recruiterName, url);
             } else if (this.classList.contains('share-copy')) {
                 copyToClipboard(url, 'Lien copié !');
@@ -234,20 +320,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Exécuter le préchargement ASAP
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', preloadCriticalImages);
+} else {
+    preloadCriticalImages();
+}
+
 // WhatsApp - Contacter le recruteur
 function shareWhatsAppRecruiter(jobTitle, recruiterName, url) {
-    const phone = document.querySelector('.share-whatsapp').dataset.recruiterPhone;
+    var shareBtn = document.querySelector('.share-whatsapp');
+    if (!shareBtn) {
+        showNotification('Numéro WhatsApp du recruteur non disponible', 'warning');
+        return;
+    }
+    
+    var phone = shareBtn.dataset.recruiterPhone;
     if (!phone) {
         showNotification('Numéro WhatsApp du recruteur non disponible', 'warning');
         return;
     }
     
     // Formater le téléphone pour wa.me (format international)
-    const waPhone = phone.replace(/[^0-9+]/g, '');
-    const message = `Bonjour ${recruiterName},\n\nJ'ai vu votre offre "${jobTitle}" sur Impact Emploi et je suis très intéressé!\n\nLien: ${url}`;
-    const encodedMsg = encodeURIComponent(message);
+    var waPhone = phone.replace(/[^0-9+]/g, '');
+    var message = 'Bonjour ' + recruiterName + ',\n\nJ\'ai vu votre offre "' + jobTitle + '" sur Impact Emploi et je suis très intéressé!\n\nLien: ' + url;
+    var encodedMsg = encodeURIComponent(message);
     
-    window.open(`https://wa.me/${waPhone}?text=${encodedMsg}`, '_blank');
+    window.open('https://wa.me/' + waPhone + '?text=' + encodedMsg, '_blank');
     showNotification('✅ Ouverture WhatsApp...', 'success');
 }
 
@@ -258,14 +357,15 @@ function shareEmailRecruiter(jobTitle, email, recruiterName, url) {
         return;
     }
     
-    const subject = encodeURIComponent(`Candidature: ${jobTitle}`);
-    const body = encodeURIComponent(
-        `Bonjour ${recruiterName},\n\n` +
-        `Je suis très intéressé par l'offre "${jobTitle}" publiée sur Impact Emploi.\n\n` +
-        `Retrouvez l'offre ici: ${url}\n\n` +
-        `Cordialement`
+    var subject = encodeURIComponent('Candidature: ' + jobTitle);
+    var body = encodeURIComponent(
+        'Bonjour ' + recruiterName + ',\n\n' +
+        'Je suis très intéressé par l\'offre "' + jobTitle + '" publiée sur Impact Emploi.\n\n' +
+        'Retrouver l\'offre ici: ' + url + '\n\n' +
+        'Cordialement'
     );
     
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
     showNotification('✅ Ouverture du client email...', 'success');
 }
+

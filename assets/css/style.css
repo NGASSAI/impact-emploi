@@ -43,6 +43,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-y: auto !important;
     overflow-x: hidden;
 }
 
@@ -240,6 +241,8 @@ nav {
     transition: var(--transition);
     gap: 8px;
     white-space: nowrap;
+    position: relative;
+    z-index: 10;
 }
 
 .btn-primary {
@@ -251,6 +254,7 @@ nav {
     background: #003d7a;
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
+    z-index: 15;
 }
 
 .btn-secondary {
@@ -261,6 +265,8 @@ nav {
 .btn-secondary:hover {
     background: #d97706;
     box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+    z-index: 15;
 }
 
 .btn-success {
@@ -419,24 +425,76 @@ footer {
     margin: 0 auto;
 }
 
+.footer-wrapper {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: white;
+    padding: 60px 0 30px;
+    margin-top: 80px;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 50px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+}
+
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.footer-contact-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.icon-link {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.icon-link:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
 .footer-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 40px;
-    padding-bottom: 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 40px;
+    max-width: 1200px;
+    margin: 0 auto 50px;
+    padding: 0 20px;
 }
 
 .footer-section h4 {
+    color: white;
     font-size: 1.1rem;
     margin-bottom: 20px;
-    color: var(--secondary);
     font-weight: 700;
 }
 
 .footer-links {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .footer-links li {
@@ -444,26 +502,81 @@ footer {
 }
 
 .footer-links a {
-    color: #D1D5DB;
+    color: #9ca3af;
     text-decoration: none;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    transition: color 0.3s ease;
+    font-size: 0.95rem;
 }
 
 .footer-links a:hover {
-    color: var(--secondary);
-    padding-left: 5px;
+    color: white;
 }
 
-.contact-info {
+.footer-bottom {
+    text-align: center;
+    padding: 30px 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+/* Navigation Mobile */
+
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.nav-links {
     display: flex;
-    flex-direction: column;
     gap: 15px;
+    align-items: center;
 }
 
-.contact-item {
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+    
+    .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--primary);
+        flex-direction: column;
+        padding: 80px 20px 20px;
+        gap: 10px;
+        z-index: 999;
+    }
+    
+    .nav-links.open {
+        display: flex;
+    }
+    
+    .nav-links a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 15px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        margin-bottom: 5px;
+    }
+    
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* Contact Info */
+.contact-info {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -833,11 +946,18 @@ footer {
     border-radius: 6px;
     transition: var(--transition);
     margin-right: 10px;
+    z-index: 10001;
+    position: relative;
 }
 
 .hamburger:hover {
     background: rgba(255, 255, 255, 0.1);
     transform: scale(1.1);
+}
+
+.hamburger:focus {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
 }
 
 /* ========================================
@@ -852,31 +972,74 @@ footer {
     nav {
         flex-wrap: wrap;
         gap: 10px;
+        position: relative;
     }
     
     .nav-links {
         display: none;
-        flex-direction: column;
         position: fixed;
         top: 0;
         left: 0;
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         background: rgba(15, 23, 42, 0.97);
-        padding: 40px 20px 20px 20px;
-        gap: 18px;
-        border-top: 2px solid var(--primary);
-        z-index: 2000;
+        padding: 60px 20px 20px 20px;
+        gap: 12px;
+        border-top: none;
+        z-index: 9999;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         align-items: flex-start;
         justify-content: flex-start;
+        /* Assure que le menu ne bloque pas les interactions quand fermé */
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
     }
+    
     .nav-links.open {
         display: flex;
-        z-index: 3000;
+        pointer-events: all;
+        opacity: 1;
+        visibility: visible;
     }
+    
+    /* Bouton de fermeture X */
+    .nav-links::before {
+        content: '✕';
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        font-size: 1.8rem;
+        color: white;
+        cursor: pointer;
+        padding: 8px;
+        line-height: 1;
+        z-index: 1002;
+    }
+    
+    .nav-links.open::before {
+        display: block;
+    }
+    
+    /* Close button for mobile menu */
+    .nav-close-btn {
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        font-size: 1.8rem;
+        background: transparent;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 8px;
+        line-height: 1;
+        z-index: 1002;
+        display: block;
+    }
+    
     .nav-links a {
-        padding: 18px 0 18px 10px;
+        padding: 14px 0 14px 10px;
         font-size: 1.1rem;
         border-radius: 6px;
         display: block;
@@ -885,17 +1048,22 @@ footer {
         background: none;
         border: none;
         text-align: left;
+        /* Optimise le tactile sur mobile */
+        min-height: 48px;
+        line-height: 1.4;
     }
-    .nav-links a:hover {
+    
+    .nav-links a:hover,
+    .nav-links a:focus {
         background: rgba(255,255,255,0.08);
         color: var(--secondary);
     }
     
-    .nav-links a {
-        padding: 12px 16px;
-        font-size: 0.9rem;
-        border-radius: 6px;
-        display: block;
+    /* Active state pour le menu */
+    .nav-links.open + .hamburger {
+        position: fixed;
+        top: 15px;
+        right: 15px;
     }
     
     .hero {
@@ -1035,7 +1203,16 @@ footer {
     }
     
     /* Boutons */
-    .btn, .btn-small { padding: 8px 10px; font-size: 0.88rem; }
+    .btn, .btn-small { 
+        padding: 8px 10px; 
+        font-size: 0.88rem; 
+        position: relative;
+        z-index: 10;
+    }
+    
+    .btn:hover, .btn-small:hover {
+        z-index: 15;
+    }
     
     /* Tables */
     .table-responsive { font-size: 0.82rem; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -1083,25 +1260,32 @@ footer {
 }
 
 /* ========================================
-   LIGHTBOX - IMAGE VIEWER MODAL
+   LIGHTBOX - VERSION PROFESSIONNELLE
    ======================================== */
-#lightbox-modal {
-    --lightbox-display: none;
-}
 
-.lightbox-overlay {
-    display: var(--lightbox-display, none);
+/* Main Modal Container */
+#lightbox-modal {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.95);
+    width: 100%;
+    height: 100%;
     z-index: 9999;
-    backdrop-filter: blur(2px);
+    display: none;
 }
 
-.lightbox-overlay.lightbox-active {
+#lightbox-modal.lightbox-active {
+    display: block;
+}
+
+/* Overlay */
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1109,148 +1293,375 @@ footer {
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.lightbox-container {
+/* Content */
+.lightbox-content {
     position: relative;
     max-width: 90vw;
     max-height: 90vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     animation: zoomIn 0.3s ease;
 }
 
 @keyframes zoomIn {
-    from {
-        transform: scale(0.9);
+    from { 
         opacity: 0;
+        transform: scale(0.8);
     }
-    to {
-        transform: scale(1);
+    to { 
         opacity: 1;
+        transform: scale(1);
     }
 }
 
+/* Image */
 .lightbox-image {
-    width: 100%;
-    height: 100%;
+    max-width: 90vw;
+    max-height: 90vh;
     object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
 }
 
+/* Close Button */
 .lightbox-close {
     position: absolute;
-    top: -40px;
-    right: 0;
-    background: transparent;
+    top: -50px;
+    right: -50px;
+    background: rgba(255, 255, 255, 0.95);
     border: none;
-    color: white;
-    font-size: 2.5rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 28px;
     cursor: pointer;
-    padding: 0;
-    width: 40px;
-    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition);
-    z-index: 10001;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .lightbox-close:hover {
-    transform: scale(1.2);
-    color: #FFF;
+    background: white;
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
 }
 
-.lightbox-nav {
-    position: absolute;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-}
-
-.lightbox-prev,
-.lightbox-next {
-    background: rgba(255, 255, 255, 0.2);
-    border: 2px solid white;
-    color: white;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
-    pointer-events: all;
-}
-
-.lightbox-prev:hover,
-.lightbox-next:hover {
-    background: rgba(255, 255, 255, 0.4);
-    transform: scale(1.1);
-}
-
-.lightbox-prev:active,
-.lightbox-next:active {
+.lightbox-close:active {
     transform: scale(0.95);
 }
 
-/* Responsive Lightbox */
+/* Image Info */
+.lightbox-info {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    animation: slideUp 0.3s ease 0.2s forwards;
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Loading State */
+.lightbox-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Desktop */
+@media (min-width: 1200px) {
+    .lightbox-content {
+        max-width: 1200px;
+        max-height: 85vh;
+    }
+    
+    .lightbox-image {
+        max-width: 1100px;
+        max-height: 80vh;
+    }
+    
+    .lightbox-close {
+        width: 50px;
+        height: 50px;
+        font-size: 32px;
+        top: -60px;
+        right: -60px;
+    }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
     .lightbox-close {
-        top: 10px;
-        right: 10px;
-    }
-
-    .lightbox-prev,
-    .lightbox-next {
+        top: 15px;
+        right: 15px;
         width: 40px;
         height: 40px;
-        font-size: 1.2rem;
+        font-size: 24px;
     }
+    
+    .lightbox-image {
+        max-width: 95vw;
+        max-height: 75vh;
+        border-radius: 8px;
+    }
+    
+    .lightbox-info {
+        bottom: -30px;
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
 
-    .lightbox-nav {
-        padding: 0 10px;
+/* Mobile - Images d'offres optimisées */
+@media (max-width: 768px) {
+    .job-image,
+    .card-job img,
+    .grid-jobs img {
+        height: 200px;
+        object-fit: contain;
+        object-position: center;
     }
 }
 
 @media (max-width: 480px) {
-    .lightbox-container {
-        max-width: 95vw;
-        max-height: 85vh;
+    .job-image,
+    .card-job img,
+    .grid-jobs img {
+        height: 180px;
+        object-fit: contain;
+        object-position: center;
     }
+}
 
-    .lightbox-close {
-        top: 5px;
-        right: 5px;
-        font-size: 2rem;
-        width: 35px;
-        height: 35px;
-    }
+/* ========================================
+   OPTIMISATIONS IMAGES & PERFORMANCE
+   ======================================== */
 
-    .lightbox-prev,
-    .lightbox-next {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
-    }
+/* Images responsives avec optimisation */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
 
-    .lightbox-nav {
-        padding: 0 5px;
+/* Lazy loading pour toutes les images */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+img[loading="lazy"].loaded,
+img[loading="lazy"]:not([src*="default"]) {
+    opacity: 1;
+}
+
+/* Images d'avatar optimisées */
+.nav-avatar,
+.avatar-profile,
+img[alt="avatar"],
+img[alt="Photo"] {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #f0f0f0;
+}
+
+/* Images d'offres d'emploi - Version CORRIGÉE */
+.job-image,
+.card-job img,
+.grid-jobs img {
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: transform 0.3s ease;
+}
+
+.job-image:hover,
+.card-job img:hover,
+.grid-jobs img:hover {
+    transform: scale(1.05);
+}
+
+/* Optimisation des images dans les cartes */
+.card img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Grille d'images optimisée */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.image-grid img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.image-grid img:hover {
+    transform: scale(1.05);
+}
+
+/* Placeholder pour images chargement */
+.img-placeholder {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 8px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   OPTIMISATIONS MOBILES & PERFORMANCES
+   ======================================== */
+
+/* Amélioration du touch sur mobile */
+@media (max-width: 768px) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
     }
+    
+    /* Désactiver le zoom sur les inputs */
+    input[type="text"], input[type="email"], input[type="password"], 
+    input[type="tel"], textarea, select {
+        font-size: 16px !important;
+        transform: scale(0.95);
+        transform-origin: left center;
+    }
+    
+    /* Optimisation des images */
+    img {
+        max-width: 100%;
+        height: auto;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+    
+    /* Scroll fluide */
+    html, body {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+    
+    /* Performance animations */
+    .btn, .card, .lightbox-overlay {
+        will-change: transform;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+}
+
+/* Lightbox au-dessus de tout - Z-INDEX CORRIGÉ */
+#lightbox-modal {
+    z-index: 999999 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
+.lightbox-overlay {
+    z-index: 999999 !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
+.lightbox-content {
+    z-index: 1000000 !important;
+    position: relative !important;
+}
+
+.lightbox-close,
+.lightbox-nav {
+    z-index: 1000001 !important;
+}
+
+/* Suppression du blocage du scroll */
+/* body.lightbox-open {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+} */
+
+/* Correction pour les boutons qui restent cliquables */
+body.lightbox-open header,
+body.lightbox-open main,
+body.lightbox-open footer {
+    pointer-events: none;
+    user-select: none;
+}
+
+body.lightbox-open .lightbox-overlay,
+body.lightbox-open .lightbox-content {
+    pointer-events: auto;
+    user-select: auto;
+}
+
+/* Correction du blocage de la lightbox */
+#lightbox-modal {
+    pointer-events: auto !important;
+}
+
+.lightbox-overlay {
+    pointer-events: auto !important;
+}
+
+.lightbox-content {
+    pointer-events: auto !important;
+}
+
+.lightbox-image {
+    pointer-events: none;
+    cursor: default;
 }

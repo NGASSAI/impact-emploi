@@ -5,18 +5,22 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 date_default_timezone_set('Africa/Brazzaville');
 
-// Headers de sécurité
+// Version statique du site - changer cette valeur quand vous voulez forcer le rechargement du cache
+define('SITE_VERSION', '1.0.9');
+
+// Headers de sécurité - avec cache intelligent pour les assets
 if (!headers_sent()) {
+    // Pages dynamiques: pas de cache
+    if (strpos($_SERVER['REQUEST_URI'] ?? '', '.php') !== false) {
+        header('Cache-Control: no-cache, no-store, must-revalidate, private');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+    }
+    
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: SAMEORIGIN');
     header('X-XSS-Protection: 1; mode=block');
     header('Referrer-Policy: strict-origin-when-cross-origin');
-    // CACHE BUSTING AGRESSIF - Force la revalidation à chaque fois
-    header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0, s-maxage=0, proxy-revalidate, public');
-    header('Pragma: no-cache');
-    header('Expires: 0');
-    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-    header('ETag: "' . md5(microtime()) . '"');
     
     // CSRF Token
     if (!isset($_SESSION['csrf_token'])) {
@@ -87,8 +91,8 @@ try {
 // Constantes
 define('ADMIN_EMAIL', 'nathanngassai885@gmail.com');
 define('WHATSAPP_NUMBER', '+242066817726');
-// Cache bust ultra-agressif par seconde pour forcer rechargement immédiat
-define('CACHE_BUST', md5(date('YmdHis'))); // Cache bust à la seconde
+// Cache bust basé sur la version statique du site
+define('CACHE_BUST', SITE_VERSION);
 
 // BASE URL dynamique : détecte si l'application est dans un sous-dossier
 $__base = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));

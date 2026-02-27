@@ -31,7 +31,7 @@
                 </ul>
             </div>
         </div>
-        
+
         <!-- Bottom Section: Copyright -->
         <div class="footer-bottom">
             <span>© 2026 Impact Emploi - Tous droits réservés</span>
@@ -41,77 +41,48 @@
 
 <script src="<?php echo BASE_URL; ?>/assets/js/lightbox.js"></script>
 <script>
-// Navigation menu management - Mobile aware
-function closeNavMenu() {
-    var navLinks = document.getElementById('navLinks');
-    if(navLinks && navLinks.classList.contains('open')) {
-        navLinks.classList.remove('open');
-        return true;
-    }
-    return false;
-}
-
-function closeLightboxIfOpen() {
-    var overlay = document.getElementById('lightbox-overlay');
-    if(overlay && overlay.classList.contains('lightbox-active')) {
-        overlay.classList.remove('lightbox-active');
-        document.body.style.overflow = 'auto';
-        return true;
-    }
-    return false;
-}
-
+// Navigation Mobile - Correction Professionnelle
 document.addEventListener('DOMContentLoaded', function() {
     var navToggle = document.getElementById('navToggle');
     var navLinks = document.getElementById('navLinks');
     
     if (navToggle && navLinks) {
-        // Toggle menu on hamburger click
+        // Toggle menu
         navToggle.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             navLinks.classList.toggle('open');
-        });
-        
-        // Close menu on ANY link click in the entire page
-        document.querySelectorAll('a').forEach(function(link) {
-            link.addEventListener('click', function() {
-                closeNavMenu();
-                closeLightboxIfOpen();
-            });
-        });
-        
-        // Close on outside clicks
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('nav') && !e.target.closest('.lightbox-overlay')) {
-                closeNavMenu();
+            
+            // Changer l'icône du bouton
+            if (navLinks.classList.contains('open')) {
+                navToggle.textContent = '✕';
+                navToggle.style.fontSize = '1.5rem';
+            } else {
+                navToggle.textContent = '☰';
+                navToggle.style.fontSize = '1.2rem';
             }
         });
         
-        // Close on touchend (mobile)
-        document.addEventListener('touchend', function(e) {
-            if (!e.target.closest('nav') && !e.target.closest('.lightbox-overlay')) {
-                closeNavMenu();
+        // Fermer au clic sur les liens
+        navLinks.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('open');
+                navToggle.textContent = '☰';
+                navToggle.style.fontSize = '1.2rem';
+            });
+        });
+        
+        // Fermer au clic extérieur
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('nav')) {
+                navLinks.classList.remove('open');
+                navToggle.textContent = '☰';
+                navToggle.style.fontSize = '1.2rem';
             }
         });
     }
 });
-
-// Safeguard: Force reset stuck UI after navigation
-function forceResetUI() {
-    try {
-        closeNavMenu();
-        closeLightboxIfOpen();
-        if(document.body.style.overflow === 'hidden') document.body.style.overflow = 'auto';
-    } catch(e) {
-        // silent
-    }
-}
-
-window.addEventListener('load', forceResetUI);
-window.addEventListener('orientationchange', forceResetUI);
-window.addEventListener('resize', forceResetUI);
-window.addEventListener('beforeunload', forceResetUI);
-window.addEventListener('pageshow', forceResetUI);
 </script>
+
 </body>
 </html>

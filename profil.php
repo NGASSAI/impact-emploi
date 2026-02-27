@@ -97,8 +97,23 @@ include 'includes/header.php';
 
             <!-- Photo de profil -->
             <div style="margin-bottom: 30px; text-align: center;">
-                <div style="width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden; border: 3px solid var(--primary);">
-                    <img src="<?php echo BASE_URL; ?>/uploads/profiles/<?php echo htmlspecialchars($u['photo_profil'] ?? 'default.png'); ?>" alt="Photo" data-lightbox loading="lazy" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;">
+                <div style="width: 200px; height: 200px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden; border: 4px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    <?php $profile_photo = $u['photo_profil'] ?? ''; ?>
+                    <?php if(!empty($profile_photo) && file_exists(__DIR__ . '/uploads/profiles/' . $profile_photo)): ?>
+                        <img src="<?php echo BASE_URL; ?>/uploads/profiles/<?php echo htmlspecialchars($profile_photo); ?>" 
+                             alt="Photo" 
+                             class="profile-photo"
+                             data-lightbox 
+                             loading="lazy" 
+                             decoding="async"
+                             style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;">
+                    <?php else: ?>
+                        <img src="<?php echo BASE_URL; ?>/default-avatar.php" 
+                             alt="Photo par défaut"
+                             class="profile-photo"
+                             data-lightbox 
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php endif; ?>
                 </div>
                 <label for="photo" style="display: block; margin-bottom: 10px; font-weight: 600;">Changer de photo</label>
                 <input type="file" id="photo" name="photo" accept="image/*" style="max-width: 300px; display: block; margin: 0 auto;">

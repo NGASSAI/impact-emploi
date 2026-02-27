@@ -79,9 +79,12 @@ $stats = $pdo->query("SELECT
                     <div class="card card-job" style="display: flex; flex-direction: column; overflow: hidden; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow=''">
                         <!-- Image de l'offre -->
                         <?php if(!empty($job['image_offre'])): ?>
-                            <img src="<?php echo BASE_URL; ?>/uploads/jobs/<?php echo htmlspecialchars($job['image_offre']); ?>" 
-                                 alt="Image offre" data-lightbox loading="lazy"
-                                 style="width: 100%; height: 200px; object-fit: cover; margin: -16px -16px 15px -16px; border-radius: 8px 8px 0 0;">
+                            <div style="width: 100%; height: 250px; overflow: hidden; margin: -16px -16px 15px -16px; border-radius: 8px 8px 0 0; background: #f8f9fa;">
+                                <img src="<?php echo BASE_URL; ?>/uploads/jobs/<?php echo htmlspecialchars($job['image_offre']); ?>" 
+                                     alt="Image offre" class="job-photo" data-lightbox loading="lazy"
+                                     style="width: 100%; height: 100%; object-fit: contain; object-position: center; transition: transform 0.3s ease;"
+                                     onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                            </div>
                         <?php endif; ?>
                         
                         <div style="flex: 1;">

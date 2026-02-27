@@ -1,25 +1,69 @@
 # Règles de sécurité Apache pour Impact Emploi
+# Optimisé pour PWA et performances
 
-# ANTI-CACHE AGRESSIF - Force la revalidation à chaque requête
+# Type MIME pour le manifest PWA
+<IfModule mod_mime.c>
+    AddType application/manifest+json .json
+    AddType application/javascript .js
+    AddType text/css .css
+</IfModule>
+
+# En-têtes de sécurité
 <IfModule mod_headers.c>
-    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
-    Header set Pragma "no-cache"
-    Header set Expires "0"
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # En-têtes PWA - Critiques pour Android
+    <FilesMatch "manifest\.json$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+    
+    # Cache pour les fichiers statiques (CSS, JS, Images)
+    <FilesMatch "\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    
+    # Cache pour les images uploadées (profiles, jobs) - 30 jours
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+    
+    # Cache pour les images dans uploads/
+    <If "%{REQUEST_URI} =~ m#/uploads/#">
+        Header set Cache-Control "public, max-age=2592000"
+    </If>
+</IfModule>
+
+# Activation de la compression GZIP
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Compression niveau maximal pour les images
+<IfModule mod_deflate.c>
+    SetEnvIfNoCase Request_URI "\.(jpg|jpeg|png|gif)$" no-gzip dont-vary
 </IfModule>
 
 # Réécriture d'URL
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
-    # Redirige toute requête vers le bon fichier s'il existe
+    
+    # Allow service worker access
+    RewriteRule ^sw\.js$ - [L]
+    
+    # Allow manifest
+    RewriteRule ^manifest\.json$ - [L]
+    
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
-    RewriteRule ^(config\.php|database\.sql)$ - [F]
-    RewriteRule ^\.env$ - [F]
-    RewriteRule ^\.git/ - [F]
+    
+    # Block sensitive files
+    RewriteRule ^(config\.php|database\.sql|\.env|\.git/) - [F,L]
 </IfModule>
+
