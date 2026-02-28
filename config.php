@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 date_default_timezone_set('Africa/Brazzaville');
 
 // Version statique du site - changer cette valeur quand vous voulez forcer le rechargement du cache
-define('SITE_VERSION', '1.0.9');
+define('SITE_VERSION', '1.3.3');
 
 // Headers de sécurité - avec cache intelligent pour les assets
 if (!headers_sent()) {
@@ -29,26 +29,15 @@ if (!headers_sent()) {
 }
 
 // Configuration Base de données
-// Détection automatique: Production vs Local
-$is_production = (
-    strpos($_SERVER['HTTP_HOST'] ?? '', 'infinityfree.com') !== false ||
-    strpos($_SERVER['HTTP_HOST'] ?? '', '.tc') !== false ||
-    strpos($_SERVER['HTTP_HOST'] ?? '', '.gt.tc') !== false
-);
+// Mode LOCAL uniquement
+$is_production = false;
 
-if ($is_production) {
-    // PRODUCTION (InfinityFREE)
-    $host = 'localhost';
-    $db   = 'impact_emploi';
-    $user = 'root'; 
-    $pass = '';
-} else {
-    // LOCAL (XAMPP)
-    $host = 'localhost';
-    $db   = 'impact_emploi';
-    $user = 'root'; 
-    $pass = '';
-}
+// LOCAL (XAMPP)
+date_default_timezone_set('Africa/Brazzaville');
+$host = 'localhost';
+$db   = 'impact_emploi';
+$user = 'root'; 
+$pass = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
@@ -152,7 +141,17 @@ function is_logged_in() {
     return isset($_SESSION['auth_id']);
 }
 
-// Track visitor stats
+// Fonctions utilitaires pour le timezone
+function get_congo_datetime($format = 'Y-m-d H:i:s') {
+    return (new DateTime('now', new DateTimeZone('Africa/Brazzaville')))->format($format);
+}
+
+function format_congo_date($date_string) {
+    $date = new DateTime($date_string, new DateTimeZone('Africa/Brazzaville'));
+    return $date->format('d/m/Y H:i');
+}
+
+// Track visitor stats avec timezone Congo
 function track_visitor($pdo, $page) {
     try {
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
@@ -160,12 +159,14 @@ function track_visitor($pdo, $page) {
         $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         $referer = $_SERVER['HTTP_REFERER'] ?? '';
         
-        // Dédétecter les bots
+        // Détecter les bots
         $is_bot = preg_match('/(bot|crawler|spider|googlebot|bing|crawl)/i', $user_agent) ? 1 : 0;
         
-        $pdo->prepare("INSERT INTO visitors (ip_address, user_id, page_visited, user_agent, referer, is_bot) 
-                      VALUES (?, ?, ?, ?, ?, ?)")
-            ->execute([$ip, $user_id, $page, $user_agent, $referer, $is_bot]);
+        $current_time = get_congo_datetime('Y-m-d H:i:s');
+        
+        $pdo->prepare("INSERT INTO visitors (ip_address, user_id, page_visited, user_agent, referer, is_bot, created_at) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?)")
+            ->execute([$ip, $user_id, $page, $user_agent, $referer, $is_bot, $current_time]);
     } catch (Exception $e) {
         // Silent fail for tracking
     }

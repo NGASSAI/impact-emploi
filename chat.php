@@ -111,9 +111,7 @@ include 'includes/header.php';
 
             <div>
                 <label class="text-muted" style="display: block; margin-bottom: 5px;">📄 Curriculum Vitae</label>
-                <a href="<?php echo BASE_URL; ?>/uploads/cv/<?php echo htmlspecialchars($data['nom_cv']); ?>" target="_blank" class="btn btn-primary btn-block">
-                    📥 Télécharger le CV
-                </a>
+                <a href="<?php echo BASE_URL; ?>/uploads/cv/<?php echo htmlspecialchars($data['nom_cv']); ?>" target="_blank" class="btn btn-primary btn-block" onclick="window.open(this.href, '_blank'); return false;">📥 Télécharger le CV</a>
             </div>
         </div>
 

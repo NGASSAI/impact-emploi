@@ -41,43 +41,63 @@
 
 <script src="<?php echo BASE_URL; ?>/assets/js/lightbox.js"></script>
 <script>
-// Navigation Mobile - Correction Professionnelle
+// Navigation Mobile - Bouton de Fermeture Simple
 document.addEventListener('DOMContentLoaded', function() {
-    var navToggle = document.getElementById('navToggle');
-    var navLinks = document.getElementById('navLinks');
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
     
-    if (navToggle && navLinks) {
-        // Toggle menu
+    if (navToggle && navLinks && closeMenuBtn) {
+        // Ouvrir le menu
         navToggle.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            navLinks.classList.toggle('open');
             
-            // Changer l'icône du bouton
-            if (navLinks.classList.contains('open')) {
-                navToggle.textContent = '✕';
-                navToggle.style.fontSize = '1.5rem';
-            } else {
-                navToggle.textContent = '☰';
-                navToggle.style.fontSize = '1.2rem';
-            }
+            navLinks.classList.add('open');
+            navToggle.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Fermer le menu avec le bouton X
+        closeMenuBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            navLinks.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
         });
         
         // Fermer au clic sur les liens
         navLinks.querySelectorAll('a').forEach(function(link) {
             link.addEventListener('click', function() {
+                // Ne pas fermer pour liens externes
+                if (link.href.includes('mailto:') || link.href.includes('tel:') || link.href.includes('wa.me')) {
+                    return;
+                }
+                
+                // Fermer le menu
                 navLinks.classList.remove('open');
-                navToggle.textContent = '☰';
-                navToggle.style.fontSize = '1.2rem';
+                navToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
             });
         });
         
         // Fermer au clic extérieur
         document.addEventListener('click', function(e) {
-            if (!e.target.closest('nav')) {
+            if (!e.target.closest('nav') && navLinks.classList.contains('open')) {
                 navLinks.classList.remove('open');
-                navToggle.textContent = '☰';
-                navToggle.style.fontSize = '1.2rem';
+                navToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Fermer avec Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+                navLinks.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
             }
         });
     }

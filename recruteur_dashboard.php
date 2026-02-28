@@ -91,6 +91,92 @@ $jobs = $jobs_stmt->fetchAll();
                             <th>Actions</th>
                         </tr>
                     </thead>
+                    <script>
+// Modal de Réponse aux Candidats
+let currentCandidatureId = null;
+
+function openResponseModal(candidatureId, candidatName, poste) {
+    currentCandidatureId = candidatureId;
+    
+    // Remplir les infos du candidat
+    document.getElementById('candidateInfo').innerHTML = `
+        <h4 style="margin: 0 0 10px 0; color: var(--primary);">${candidatName}</h4>
+        <p style="margin: 5px 0; color: #666;"><strong>Poste:</strong> ${poste}</p>
+        <p style="margin: 5px 0; color: #666;"><strong>ID Candidature:</strong> #${candidatureId}</p>
+    `;
+    
+    // Remplir l'ID caché
+    document.getElementById('candidatureId').value = candidatureId;
+    
+    // Réinitialiser le formulaire
+    document.getElementById('statut').value = 'En attente';
+    document.getElementById('message').value = '';
+    
+    // Afficher la modal
+    document.getElementById('responseModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeResponseModal() {
+    document.getElementById('responseModal').style.display = 'none';
+    document.body.style.overflow = '';
+    currentCandidatureId = null;
+}
+
+function submitResponse(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(document.getElementById('responseForm'));
+    formData.append('ajax_response', '1');
+    
+    // Désactiver le bouton pendant l'envoi
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '⏳ Envoi en cours...';
+    submitBtn.disabled = true;
+    
+    fetch('<?php echo BASE_URL; ?>/ajax_response.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Succès
+            alert('✅ ' + data.message);
+            closeResponseModal();
+            // Recharger la page pour voir les changements
+            window.location.reload();
+        } else {
+            // Erreur
+            alert('❌ ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('❌ Erreur lors de l\'envoi de la réponse');
+    })
+    .finally(() => {
+        // Réactiver le bouton
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    });
+}
+
+// Fermer la modal en cliquant à l'extérieur
+document.getElementById('responseModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeResponseModal();
+    }
+});
+
+// Fermer avec la touche Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('responseModal').style.display === 'flex') {
+        closeResponseModal();
+    }
+});
+</script>
                     <tbody>
                         <?php foreach($candidatures as $c): ?>
                             <tr>
@@ -114,8 +200,8 @@ $jobs = $jobs_stmt->fetchAll();
                                 </td>
                                 <td><?php echo date('d/m/Y', strtotime($c['date_postulation'])); ?></td>
                                 <td>
-                                    <a href="<?php echo BASE_URL; ?>/uploads/cv/<?php echo htmlspecialchars($c['nom_cv']); ?>" target="_blank" class="btn btn-primary btn-small">📄 CV</a>
-                                    <a href="<?php echo BASE_URL; ?>/chat.php?id=<?php echo $c['id']; ?>" class="btn btn-secondary btn-small">💬 Répondre</a>
+                                    <a href="<?php echo BASE_URL; ?>/uploads/cv/<?php echo htmlspecialchars($c['nom_cv']); ?>" target="_blank" class="btn btn-primary btn-small" onclick="window.open(this.href, '_blank'); return false;">📄 CV</a>
+                                    <button onclick="openResponseModal(<?php echo $c['id']; ?>, '<?php echo htmlspecialchars($c['prenom'] . ' ' . $c['nom']); ?>', '<?php echo htmlspecialchars($c['titre']); ?>')" class="btn btn-secondary btn-small">💬 Répondre</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -173,6 +259,45 @@ $jobs = $jobs_stmt->fetchAll();
                 <a href="<?php echo BASE_URL; ?>/create_job.php" class="btn btn-primary" style="margin-top: 20px;">Créer votre première offre</a>
             </div>
         <?php endif; ?>
+    </div>
+</div>
+
+<!-- Modal de Réponse aux Candidats -->
+<div id="responseModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: var(--primary); margin: 0;">💬 Répondre au Candidat</h3>
+            <button onclick="closeResponseModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
+        </div>
+        
+        <div id="candidateInfo" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+            <!-- Infos candidat remplies par JavaScript -->
+        </div>
+        
+        <form id="responseForm" onsubmit="submitResponse(event)">
+            <input type="hidden" id="candidatureId" name="candidature_id">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="statut" style="display: block; margin-bottom: 8px; font-weight: 600;">🎯 Décision</label>
+                <select id="statut" name="statut" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;">
+                    <option value="En attente">⏳ En évaluation</option>
+                    <option value="Accepté">✅ Accepté - Proposition d'emploi</option>
+                    <option value="Refusé">❌ Refusé</option>
+                </select>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label for="message" style="display: block; margin-bottom: 8px; font-weight: 600;">📝 Message au Candidat</label>
+                <textarea id="message" name="message" placeholder="Écrivez votre message professionnel..." required style="width: 100%; min-height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 6px; resize: vertical;"></textarea>
+                <small style="color: #666; font-size: 0.9rem;">Soyez professionnel et constructif dans votre réponse</small>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button type="submit" class="btn btn-primary" style="flex: 1; padding: 12px;">📤 Envoyer la Réponse</button>
+                <button type="button" onclick="closeResponseModal()" class="btn btn-outline" style="flex: 1; padding: 12px;">Annuler</button>
+            </div>
+        </form>
     </div>
 </div>
 

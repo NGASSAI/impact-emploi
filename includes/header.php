@@ -19,12 +19,12 @@ require_once dirname(__DIR__) . '/config.php';
     <link rel="icon" type="image/png" sizes="192x192" href="<?php echo BASE_URL; ?>/assets/img/icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="<?php echo BASE_URL; ?>/assets/img/icon-512.png">
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="<?php echo BASE_URL; ?>/manifest.json">
+    <!-- PWA Manifest Désactivé -->
+    <!-- <link rel="manifest" href="<?php echo BASE_URL; ?>/manifest.json"> -->
     
-    <!-- Service Worker Registration -->
+    <!-- Service Worker Désactivé -->
     <script>
-    // Désactiver temporairement le Service Worker pour tester
+    // PWA désactivé pour optimisation responsive
     // if ('serviceWorker' in navigator) {
     //     window.addEventListener('load', function() {
     //         navigator.serviceWorker.register('<?php echo BASE_URL; ?>/sw.js')
@@ -44,8 +44,11 @@ require_once dirname(__DIR__) . '/config.php';
 <header>
     <nav class="container flex-between">
         <a href="<?php echo BASE_URL; ?>/index.php" class="logo">Impact Emploi</a>
-        <button id="navToggle" class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+        <button id="navToggle" class="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
+            <span class="menu-icon"></span>
+        </button>
         <div class="nav-links" id="navLinks">
+            <button class="close-menu-btn" id="closeMenuBtn" aria-label="Fermer le menu">✕</button>
             <?php if(isset($_SESSION['auth_id'])): ?>
                 <?php
                 $avatar = $_SESSION['auth_photo'] ?? null;
