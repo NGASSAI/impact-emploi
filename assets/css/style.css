@@ -126,6 +126,220 @@ nav {
 }
 
 /* ========================================
+   ZONE UTILISATEUR (PC) - NOUVEAU
+   ======================================== */
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 6px 12px;
+    border-radius: 50px;
+}
+
+.avatar-link {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 12px !important;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    text-decoration: none !important;
+}
+
+.avatar-link:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.avatar-link .nav-avatar {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--secondary);
+}
+
+.avatar-link .user-name {
+    color: white;
+    font-weight: 500;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.user-name {
+    color: white;
+    font-weight: 500;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+/* Lien de navigation stylisé */
+.nav-link {
+    background: rgba(255, 255, 255, 0.1) !important;
+    padding: 8px 14px !important;
+    border-radius: 6px !important;
+    font-size: 0.9rem !important;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Cloche de notifications */
+.notification-bell {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.notification-bell:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+}
+
+.bell-icon {
+    font-size: 1.3rem;
+}
+
+.notification-badge-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #ff4757;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 16px;
+    text-align: center;
+    animation: pulse 1.5s infinite;
+}
+
+/* Bouton déconnexion */
+.btn-logout {
+    background: #EF4444 !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    white-space: nowrap;
+}
+
+.btn-logout:hover {
+    background: #DC2626 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* ========================================
+   BOUTON PLUS (DROPDOWN)
+   ======================================== */
+.more-dropdown {
+    position: relative;
+}
+
+.nav-more-btn {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.dropdown-arrow {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+}
+
+.nav-more-btn.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.more-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    min-width: 200px;
+    padding: 8px 0;
+    z-index: 9998;
+    display: none;
+    animation: slideDownMenu 0.3s ease;
+}
+
+.more-menu.show {
+    display: block;
+}
+
+@keyframes slideDownMenu {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.more-link {
+    display: block;
+    padding: 12px 20px;
+    color: #333 !important;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.more-link:hover {
+    background: #f0f7ff;
+    color: var(--primary) !important;
+    padding-left: 25px;
+}
+
+/* ========================================
+   RESPONSIVE HEADER (TABLETTE & MOBILE)
+   ======================================== */
+@media (max-width: 1024px) {
+    .user-section {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px;
+        border-radius: 12px;
+    }
+    
+    .user-info {
+        width: 100%;
+        justify-content: center;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+        margin-bottom: 5px;
+    }
+    
+    .nav-link {
+        font-size: 0.85rem !important;
+        padding: 6px 10px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .user-section {
+        display: none;
+    }
+}
+
+/* ========================================
    CONTENEUR
    ======================================== */
 .container {

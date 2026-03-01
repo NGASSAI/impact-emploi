@@ -113,10 +113,18 @@ function fix_double_encoding($data) {
 }
 
 // Fonction pour afficher un message de manière sécurisée
+// Corrige le double encodage des caractères spéciaux
 function display_message($message) {
     if (empty($message)) return '';
-    // Utiliser nl2br pour préserver les sauts de ligne
-    return nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
+    
+    // Étape 1: Décoder une fois pour corriger le double encodage si présent
+    $decoded = html_entity_decode($message, ENT_QUOTES, 'UTF-8');
+    
+    // Étape 2: Nettoyer les balises HTML残留
+    $cleaned = strip_tags(trim($decoded));
+    
+    // Étape 3: Encoder pour l'affichage sécurisé + nl2br pour préserver les sauts de ligne
+    return nl2br(htmlspecialchars($cleaned, ENT_QUOTES, 'UTF-8'));
 }
 
 function validate_email($email) {
