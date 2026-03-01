@@ -40,6 +40,8 @@ CREATE TABLE IF NOT EXISTS `candidatures` (
   `recruteur_id` int,
   `recruteur_message` text,
   `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `notification_seen` tinyint(1) DEFAULT 0,
+  `candidate_notification_seen` tinyint(1) DEFAULT 0,
   FOREIGN KEY (`id_utilisateur`) REFERENCES `users`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`id_offre`) REFERENCES `jobs`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`recruteur_id`) REFERENCES `users`(`id`) ON DELETE SET NULL

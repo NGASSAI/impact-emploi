@@ -31,7 +31,7 @@ if($_SESSION['auth_role'] !== 'admin' && $_SESSION['auth_id'] !== $data['recrute
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     
-    $message = clean($_POST['message'] ?? '');
+    $message = sanitize($_POST['message'] ?? ''); // Utiliser sanitize() pour encoder correctement
     $statut = $_POST['statut'] ?? '';
 
     // Validation
@@ -45,6 +45,32 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
            ->execute([$message, $statut, $id]);
 
         log_activity($_SESSION['auth_id'], 'update_candidature', "Candidature $id mise à jour: $statut");
+        
+        // Créer une notification pour le candidat
+        $stmt = $pdo->prepare("SELECT id_utilisateur FROM candidatures WHERE id = ?");
+        $stmt->execute([$id]);
+        $candidature = $stmt->fetch();
+        
+        if ($candidature) {
+            $stmt = $pdo->prepare("
+                INSERT INTO notifications (user_id, type, title, message, data) 
+                VALUES (?, 'recruiter_response', 'Réponse à votre candidature', ?, ?)
+            ");
+            $notification_data = json_encode([
+                'candidature_id' => $id,
+                'statut' => $statut,
+                'message' => substr($message, 0, 100)
+            ]);
+            $stmt->execute([
+                $candidature['id_utilisateur'],
+                "Un recruteur a répondu à votre candidature. Statut: $statut",
+                $notification_data
+            ]);
+            
+            // Marquer la notification du candidat comme non lue
+            $pdo->prepare("UPDATE candidatures SET candidate_notification_seen = 0 WHERE id = ?")
+                 ->execute([$id]);
+        }
         
         header('Location: ' . BASE_URL . '/chat.php?id=' . $id . '&success=Candidature mise à jour');
         exit();
@@ -106,7 +132,7 @@ include 'includes/header.php';
 
             <div style="margin-bottom: 15px;">
                 <label class="text-muted" style="display: block; margin-bottom: 5px;">📅 Date de Candidature</label>
-                <p><?php echo date('d/m/Y à H:i', strtotime($data['date_postulation'])); ?></p>
+                <p><?php echo format_congo_date($data['date_postulation']); ?></p>
             </div>
 
             <div>
@@ -139,7 +165,7 @@ include 'includes/header.php';
 
                 <div class="form-group">
                     <label for="message">📝 Message au Candidat</label>
-                    <textarea id="message" name="message" placeholder="Écrivez votre message (feedback, prochaines étapes, etc.)" style="min-height: 150px; padding: 12px;"><?php echo htmlspecialchars($data['recruteur_message'] ?? ''); ?></textarea>
+                    <textarea id="message" name="message" placeholder="Écrivez votre message (feedback, prochaines étapes, etc.)" style="min-height: 150px; padding: 12px;"><?php echo display_message($data['recruteur_message'] ?? ''); ?></textarea>
                     <small class="text-muted">Soyez professionnel et bienveillant dans votre message</small>
                 </div>
 

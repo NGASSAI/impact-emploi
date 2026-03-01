@@ -235,6 +235,7 @@ try {
                         <th>Poste</th>
                         <th>Statut</th>
                         <th>Date</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -251,12 +252,18 @@ try {
                                         <?php echo htmlspecialchars($c['statut']); ?>
                                     </span>
                                 </td>
-                                <td><?php echo date('d/m/Y H:i', strtotime($c['date_postulation'])); ?></td>
+                                <td><?php echo format_congo_date($c['date_postulation']); ?></td>
+                                <td style="text-align: center;">
+                                    <button onclick="supprimerCandidatureAdmin(<?php echo $c['id']; ?>, '<?php echo htmlspecialchars($c['prenom'] . ' ' . $c['nom']); ?>', '<?php echo htmlspecialchars($c['titre']); ?>')" 
+                                            class="btn-danger" style="padding: 6px 12px; font-size: 0.85rem;">
+                                        🗑️ Supprimer
+                                    </button>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4" style="text-align: center; color: var(--text-secondary);">Aucune candidature</td>
+                            <td colspan="5" style="text-align: center; color: var(--text-secondary);">Aucune candidature</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -317,7 +324,7 @@ try {
                                 <strong style="font-size: 0.85rem;">
                                     <?php echo htmlspecialchars(substr($activity['prenom'] . ' ' . $activity['nom'] ?? 'Système', 0, 15)); ?>
                                 </strong>
-                                <small class="text-muted" style="white-space: nowrap; font-size: 0.8rem;"><?php echo isset($activity['created_at']) && $activity['created_at'] ? date('H:i', strtotime($activity['created_at'])) : 'N/A'; ?></small>
+                                <small class="text-muted" style="white-space: nowrap; font-size: 0.8rem;"><?php echo isset($activity['created_at']) && $activity['created_at'] ? format_congo_date($activity['created_at']) : 'N/A'; ?></small>
                             </div>
                             <p style="margin: 0; color: var(--text-secondary); font-size: 0.8rem;">
                                 <strong><?php echo htmlspecialchars($activity['action']); ?></strong>
@@ -384,3 +391,44 @@ try {
 </div>
 
 <?php include 'includes/footer.php'; ?>
+
+<script>
+function supprimerCandidatureAdmin(candidatureId, nomCandidat, titreOffre) {
+    if (confirm('⚠️ Voulez-vous vraiment supprimer la candidature de "' + nomCandidat + '" pour le poste : "' + titreOffre + '" ?\n\nCette action est irréversible et supprimera définitivement la candidature et le CV du candidat.')) {
+        // Désactiver le bouton pendant la suppression
+        event.target.disabled = true;
+        event.target.innerHTML = '⏳ Suppression...';
+        
+        // Envoyer la requête AJAX
+        fetch('ajax_supprimer_candidature_admin.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'candidature_id=' + candidatureId + '&csrf_token=<?php echo $_SESSION["csrf_token"]; ?>'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Succès: recharger la page
+                alert('✅ ' + data.message);
+                window.location.href = 'admin_dashboard.php?success=' + encodeURIComponent(data.message);
+            } else {
+                // Erreur: afficher le message
+                alert('❌ ' + data.message);
+                // Réactiver le bouton
+                event.target.disabled = false;
+                event.target.innerHTML = '🗑️ Supprimer';
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('❌ Erreur lors de la suppression de la candidature');
+            // Réactiver le bouton
+            event.target.disabled = false;
+            event.target.innerHTML = '🗑️ Supprimer';
+        });
+    }
+}
+</script>

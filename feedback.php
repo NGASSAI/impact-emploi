@@ -27,7 +27,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             log_activity($_SESSION['auth_id'], 'submit_feedback', "Feedback envoyé : $sujet");
             
-            $success = "✓ Merci ! Votre feedback a été envoyé avec succès.";
+            $success = "Merci ! Votre feedback a été envoyé avec succès.";
             $_POST = []; // Vider le formulaire
         } catch(Exception $e) {
             $error = "Erreur lors de l'envoi : " . $e->getMessage();
@@ -45,13 +45,13 @@ include 'includes/header.php';
 
     <?php if($error): ?>
         <div class="alert alert-error" style="margin-bottom: 20px;">
-            ✕ <?php echo $error; ?>
+            Erreur : <?php echo $error; ?>
         </div>
     <?php endif; ?>
 
     <?php if($success): ?>
         <div class="alert alert-success" style="margin-bottom: 20px;">
-            <?php echo $success; ?>
+            Succès : <?php echo $success; ?>
         </div>
     <?php endif; ?>
 

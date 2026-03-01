@@ -160,7 +160,7 @@ $visitors = $stmt->fetchAll();
                             </span>
                         </td>
                         <td style="padding: 12px; white-space: nowrap;">
-                            <small><?php echo date('H:i', strtotime($v['last_visit'])); ?></small>
+                            <small><?php echo format_congo_date($v['last_visit']); ?></small>
                         </td>
                     </tr>
                     <?php endforeach; ?>

@@ -116,7 +116,7 @@ include 'includes/header.php';
                         </div>
 
                         <p style="margin: 10px 0; color: #999; font-size: 0.9rem;">
-                            📅 Candidature du <?php echo date('d/m/Y à H:i', strtotime($c['date_postulation'])); ?>
+                            📅 Candidature du <?php echo format_congo_date($c['date_postulation']); ?>
                         </p>
 
                         <!-- Message du recruteur -->
@@ -124,7 +124,7 @@ include 'includes/header.php';
                             <div style="margin-top: 15px; padding: 15px; background: white; border-radius: 6px; border-left: 4px solid var(--primary);">
                                 <p style="margin: 0 0 10px 0; color: var(--primary); font-weight: 600;">💬 Message du recruteur</p>
                                 <p style="margin: 0; color: var(--text-secondary); line-height: 1.6;">
-                                    <?php echo nl2br(htmlspecialchars($c['recruteur_message'])); ?>
+                                    <?php echo display_message($c['recruteur_message']); ?>
                                 </p>
                             </div>
                         <?php endif; ?>

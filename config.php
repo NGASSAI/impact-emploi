@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 date_default_timezone_set('Africa/Brazzaville');
 
 // Version statique du site - changer cette valeur quand vous voulez forcer le rechargement du cache
-define('SITE_VERSION', '1.3.3');
+define('SITE_VERSION', '1.4.1');
 
 // Headers de sécurité - avec cache intelligent pour les assets
 if (!headers_sent()) {
@@ -91,13 +91,32 @@ if ($__base === '/' || $__base === '.' || $__base === '') {
 define('BASE_URL', rtrim($__base, '/'));
 
 // Fonctions de sécurité
+// IMPORTANT: clean() retire les tags HTML mais NE PAS utiliser htmlspecialchars ici
+// car on l'applique à l'AFFICHAGE avec htmlspecialchars()
+// Cela évite le double encodage qui cause les caractères spéciaux
 function clean($data) {
+    return strip_tags(trim($data));
+}
+
+// Sanitize:trim + strip_tags avec encodage pour affichage sécurisé
+function sanitize($data) {
     return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
 }
 
-// Sanitize: trim + strip_tags SANS htmlspecialchars (appliquer htmlspecialchars à l'affichage uniquement)
-function sanitize($data) {
-    return strip_tags(trim($data));
+// Fonction pour corriger le double encodage des caractères spéciaux
+// Utiliser cette fonction pour nettoyer les données existantes dans la base
+function fix_double_encoding($data) {
+    if ($data === null) return null;
+    // Décoder une fois si double encodé, puis nettoyer
+    $decoded = html_entity_decode($data, ENT_QUOTES, 'UTF-8');
+    return strip_tags(trim($decoded));
+}
+
+// Fonction pour afficher un message de manière sécurisée
+function display_message($message) {
+    if (empty($message)) return '';
+    // Utiliser nl2br pour préserver les sauts de ligne
+    return nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
 }
 
 function validate_email($email) {

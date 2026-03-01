@@ -171,7 +171,7 @@ $action_icons = [
                             </code>
                         </td>
                         <td style="padding: 12px; white-space: nowrap;">
-                            <?php echo date('d/m/Y H:i', strtotime($a['created_at'])); ?>
+                            <?php echo format_congo_date($a['created_at']); ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>

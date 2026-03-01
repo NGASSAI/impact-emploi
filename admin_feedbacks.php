@@ -47,7 +47,7 @@ include 'includes/header.php';
                             </p>
                         </div>
                         <span style="background: var(--primary); color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; white-space: nowrap;">
-                            🕐 <?php echo date('d/m/Y H:i', strtotime($fb['date_envoi'])); ?>
+                            🕐 <?php echo format_congo_date($fb['date_envoi']); ?>
                         </span>
                     </div>
 

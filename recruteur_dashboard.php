@@ -135,7 +135,7 @@ function submitResponse(event) {
     submitBtn.innerHTML = '⏳ Envoi en cours...';
     submitBtn.disabled = true;
     
-    fetch('<?php echo BASE_URL; ?>/ajax_response.php', {
+    fetch('ajax_response.php', {
         method: 'POST',
         body: formData
     })
@@ -190,14 +190,17 @@ document.addEventListener('keydown', function(e) {
                                     </div>
                                 </td>
                                 <td><?php echo htmlspecialchars($c['titre']); ?></td>
-                                <td>
-                                    <span class="badge <?php 
-                                        echo $c['statut'] === 'Accepté' ? 'badge-success' : 
-                                        ($c['statut'] === 'Refusé' ? 'badge-danger' : 'badge-warning');
-                                    ?>">
-                                        <?php echo htmlspecialchars($c['statut']); ?>
-                                    </span>
-                                </td>
+                        <td>
+                            <span class="badge <?php 
+                                echo $c['statut'] === 'Accepté' ? 'badge-success' : 
+                                ($c['statut'] === 'Refusé' ? 'badge-danger' : 'badge-warning');
+                            ?>">
+                                <?php echo htmlspecialchars($c['statut']); ?>
+                            </span>
+                            <?php if(!empty($c['recruteur_message'])): ?>
+                                <br><small style="color: var(--primary);">💬 Répondu</small>
+                            <?php endif; ?>
+                        </td>
                                 <td><?php echo date('d/m/Y', strtotime($c['date_postulation'])); ?></td>
                                 <td>
                                     <a href="<?php echo BASE_URL; ?>/uploads/cv/<?php echo htmlspecialchars($c['nom_cv']); ?>" target="_blank" class="btn btn-primary btn-small" onclick="window.open(this.href, '_blank'); return false;">📄 CV</a>

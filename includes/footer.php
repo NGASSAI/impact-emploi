@@ -39,6 +39,8 @@
     </div>
 </footer>
 
+<script src="<?php echo BASE_URL; ?>/assets/js/notifications.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/js/update_manager.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/js/lightbox.js"></script>
 <script>
 // Navigation Mobile - Bouton de Fermeture Simple

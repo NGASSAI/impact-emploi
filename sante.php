@@ -149,7 +149,7 @@ $health_checks['config'] = [
 ];
 
 // Timestamp
-$check_time = date('d/m/Y à H:i:s');
+$check_time = get_congo_datetime('d/m/Y à H:i:s');
 ?>
 
 <?php include 'includes/header.php'; ?>
@@ -220,7 +220,7 @@ $check_time = date('d/m/Y à H:i:s');
         <div class="info-grid">
             <div class="info-item">
                 <span class="info-label">Heure serveur:</span>
-                <span class="info-value"><?php echo date('d/m/Y H:i:s'); ?></span>
+                <span class="info-value"><?php echo get_congo_datetime('d/m/Y H:i:s'); ?></span>
             </div>
             <div class="info-item">
                 <span class="info-label">Adresse IP:</span>
