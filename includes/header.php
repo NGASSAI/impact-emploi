@@ -479,7 +479,7 @@ function closeMoreMenuOutside(event) {
     let checkInterval = null;
     let notificationsViewed = false;
     
-    // Vérifier les notifications
+    // Vérifier les notifications - Sans afficher d'erreurs
     async function checkNotifications() {
         try {
             const response = await fetch('<?php echo BASE_URL; ?>/ajax_notifications.php', {
@@ -503,7 +503,8 @@ function closeMoreMenuOutside(event) {
                 updateBellBadge(0);
             }
         } catch(e) {
-            console.log('Erreur notification:', e);
+            // Silencieux - pas d'erreur pour l'utilisateur
+            updateBellBadge(0);
         }
     }
     
@@ -559,7 +560,7 @@ function closeMoreMenuOutside(event) {
             return;
         }
         
-        // Charger les notifications
+        // Charger les notifications - Sans erreur affichée
         try {
             const response = await fetch('<?php echo BASE_URL; ?>/ajax_notifications.php', {
                 method: 'GET',
@@ -618,7 +619,13 @@ function closeMoreMenuOutside(event) {
             updateBellBadge(0);
             
         } catch(e) {
-            list.innerHTML = '<div style="padding: 20px; text-align: center; color: red;">Erreur de chargement</div>';
+            // Pas d'erreur affichée - montrer "Aucune notification"
+            list.innerHTML = `
+                <div class="notification-empty">
+                    <div class="notification-empty-icon">🔕</div>
+                    <p>Aucune notification</p>
+                </div>
+            `;
         }
         
         dropdown.style.display = 'block';
